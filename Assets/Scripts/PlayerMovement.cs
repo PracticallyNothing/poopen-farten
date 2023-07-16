@@ -16,6 +16,7 @@ public class PlayerMovement : MonoBehaviour
     {
         if (collision.gameObject.CompareTag("Floor")) CanJump = true;
     }
+    
     private void OnTriggerEnter2D(Collider2D collision)
     {
         if (collision.gameObject.CompareTag("KillZone"))
@@ -28,7 +29,7 @@ public class PlayerMovement : MonoBehaviour
         
         if (Input.GetKey(KeyCode.W) && CanJump)
         {
-            transform.GetComponent<Rigidbody2D>().AddForce(new Vector3(0, 5, 0), ForceMode2D.Impulse);
+            transform.GetComponent<Rigidbody2D>().AddForce(new Vector3(0, 10, 0), ForceMode2D.Impulse);
             CanJump= false; 
         }
         if (Input.GetKey(KeyCode.A)) transform.Translate(-0.1f, 0, 0);
