@@ -221,7 +221,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   FollowTarget: {fileID: 1905469264}
-  OffsetMultiplier: 1
+  minSmoothTime: 0.35
+  maxSmoothTime: 0.8
+  offset: {x: 0, y: 0, z: 0}
+  velocityFactor: 0.5
 --- !u!1 &246405906
 GameObject:
   m_ObjectHideFlags: 0
