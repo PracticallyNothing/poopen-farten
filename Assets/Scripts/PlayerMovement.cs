@@ -22,7 +22,7 @@ public class PlayerMovement : MonoBehaviour
         var vel = myRigidbody.velocity;
         // Debug.Log(lastJump == null || DateTime.Now - lastJump > new TimeSpan(0, 0, 2));
 
-        if (Input.GetKey(KeyCode.W) && canJump &&
+        if (Input.GetKey(KeyCode.Space) && canJump &&
             (lastJump == null || DateTime.Now - lastJump > new TimeSpan(0, 0, 0, 0, 250)))
         {
             lastJump = DateTime.Now;
