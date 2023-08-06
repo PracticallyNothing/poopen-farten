@@ -25,6 +25,8 @@ public class ElementCombine : MonoBehaviour
     
     [SerializeField]
     public List<Element> selectedElements = new();
+
+    GameObject heldPotion = null;
     
     // Update is called once per frame
     void Update()
@@ -35,15 +37,39 @@ public class ElementCombine : MonoBehaviour
             MixElement(Element.Sulfur);
         if (Input.GetKeyDown(KeyCode.E))
             MixElement(Element.Acid);
+
+        Vector3 dir = Camera.main.ScreenToWorldPoint(Input.mousePosition) - transform.position;
+        dir.Normalize();
+
+        if(heldPotion != null && Input.GetMouseButton(0)) {
+            heldPotion.transform.localPosition = new Vector3(-1, 0, -1) - dir;
+        } else if(heldPotion != null && Input.GetMouseButtonUp(0)) {
+            var rigidBody = heldPotion.GetComponent<Rigidbody2D>();
+            rigidBody.simulated = true;
+
+            heldPotion.transform.position = transform.position + dir * 3;
+            heldPotion.transform.SetParent(null, true);
+
+            rigidBody.AddForce(dir * 50, ForceMode2D.Impulse);
+            rigidBody.AddTorque(25);
+
+            heldPotion = null;
+        }
     }
 
     // Attempt to add an element to the current mix.
     // Return whether the mixing succeeded.
     bool MixElement(Element e)
     {
+        // Don't allow mixing elements if a potion has already been created.
+        if(heldPotion != null) {
+            Debug.LogError("You're already holding a potion!");
+            return false;
+        }
+
         if(selectedElements.Contains(e)) {
-            Debug.Log(string.Format(
-                "Nope, element {0} is present in the mix!",
+            Debug.LogError(string.Format(
+                "Nope, {0} is present in the mix!",
                 e
             ));
             return false;
@@ -75,11 +101,15 @@ public class ElementCombine : MonoBehaviour
         if(recipe == null)
             return;
         
-        Instantiate(
+        heldPotion = Instantiate(
             recipe.result,
-            transform.GetChild(0).position + new Vector3(-1f, 0, 0),
+            transform.position + new Vector3(-1, 0, 0),
             Quaternion.identity,
-            null
+            gameObject.transform
         );
+
+        // Disable physics and collision on the potion.
+        heldPotion.GetComponent<Rigidbody2D>().simulated = false;
+        // heldPotion.GetComponent<CircleCollider2D>().enabled = false;
     }
 }

@@ -14,7 +14,7 @@ public class PlayerMovement : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        myRigidbody = GetComponentInChildren<Rigidbody2D>();
+        myRigidbody = GetComponent<Rigidbody2D>();
     }
 
     void FixedUpdate()
