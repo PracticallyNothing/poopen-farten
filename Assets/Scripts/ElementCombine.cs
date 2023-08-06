@@ -77,7 +77,7 @@ public class ElementCombine : MonoBehaviour
         
         Instantiate(
             recipe.result,
-            transform.GetChild(0).position,
+            transform.GetChild(0).position + new Vector3(-1f, 0, 0),
             Quaternion.identity,
             null
         );
