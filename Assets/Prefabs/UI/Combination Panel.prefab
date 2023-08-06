@@ -119,10 +119,14 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   elementIcons:
-  - {fileID: 21300000, guid: 95254239655fce4ad870ada3394f25ce, type: 3}
-  - {fileID: 21300000, guid: a795d0d4269f746748d354cd82702ebf, type: 3}
-  - {fileID: 21300000, guid: 7a7530cdca926c59d898c9061391cab8, type: 3}
-  - {fileID: 21300000, guid: 16f228f2160d2fdac820cba45498ac37, type: 3}
+  - element: 0
+    icon: {fileID: 21300000, guid: 95254239655fce4ad870ada3394f25ce, type: 3}
+  - element: 1
+    icon: {fileID: 21300000, guid: 16f228f2160d2fdac820cba45498ac37, type: 3}
+  - element: 2
+    icon: {fileID: 21300000, guid: 7a7530cdca926c59d898c9061391cab8, type: 3}
+  - element: 3
+    icon: {fileID: 21300000, guid: a795d0d4269f746748d354cd82702ebf, type: 3}
 --- !u!1 &9125720968071500789
 GameObject:
   m_ObjectHideFlags: 0

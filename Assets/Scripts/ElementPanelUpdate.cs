@@ -1,23 +1,55 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.UI;
 
+[Serializable]
+public class ElementIcon {
+    public Element element;
+    public Sprite icon;
+}
+
 public class ElementPanelUpdate : MonoBehaviour
 {
-    [SerializeField] Sprite[] elementIcons;
+    [SerializeField] 
+    ElementIcon[] elementIcons = {};
+
+    ElementCombine combiner = null;
+    Sprite emptyIcon = null;
+
+    void Start()
+    {
+        combiner = FindAnyObjectByType<ElementCombine>();
+
+        emptyIcon = elementIcons
+          .First((x) => x.element == Element.None)
+          .icon;
+    }
 
     // Update is called once per frame
     void Update()
     {
-        int iconIndex = 0;
+        var firstComponent = transform.GetChild(0).GetComponent<Image>();
+        var secondComponent = transform.GetChild(1).GetComponent<Image>();
 
-        iconIndex = FindAnyObjectByType<ElementCombine>().chosenElem1;
-        transform.GetChild(0).GetComponent<Image>().sprite = elementIcons[iconIndex];
+        firstComponent.sprite = emptyIcon;
+        secondComponent.sprite = emptyIcon;
 
-        iconIndex = FindAnyObjectByType<ElementCombine>().chosenElem2;
-        transform.GetChild(1).GetComponent<Image>().sprite = elementIcons[iconIndex];
+        if(combiner.selectedElements.Count > 0) {
+            var elem = combiner.selectedElements[0];
+            firstComponent.sprite = elementIcons
+              .First((x) => x.element == elem)
+              .icon;
+        }
 
+        if(combiner.selectedElements.Count > 1) {
+            var elem = combiner.selectedElements[1];
+            secondComponent.sprite = elementIcons
+              .First((x) => x.element == elem)
+              .icon;
+        }
     }
 }

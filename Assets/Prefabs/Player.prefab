@@ -10,7 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 7709331526693820743}
   - component: {fileID: 7709331526693820740}
-  - component: {fileID: 2034796271853058831}
+  - component: {fileID: 3346984182151892346}
   m_Layer: 0
   m_Name: Player
   m_TagString: Untagged
@@ -47,7 +47,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   canJump: 1
---- !u!114 &2034796271853058831
+--- !u!114 &3346984182151892346
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -59,12 +59,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: de1e6aafeeb1422429616888b4a1edd0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  potions:
-  - {fileID: 5848551582423299879, guid: 06385044436ea3a4091863cf37506eea, type: 3}
-  - {fileID: 5848551582423299879, guid: 93081114e1f6bae49b3bd2603dffad0c, type: 3}
-  - {fileID: 5848551582423299879, guid: 1ab04000898b7a2449bf9ba6cbc67a59, type: 3}
-  chosenElem1: 0
-  chosenElem2: 0
+  recipes:
+  - ingredients: 0100000002000000
+    result: {fileID: 5848551582423299879, guid: 06385044436ea3a4091863cf37506eea, type: 3}
+  - ingredients: 0100000003000000
+    result: {fileID: 5848551582423299879, guid: 93081114e1f6bae49b3bd2603dffad0c, type: 3}
+  - ingredients: 0200000003000000
+    result: {fileID: 5848551582423299879, guid: 1ab04000898b7a2449bf9ba6cbc67a59, type: 3}
+  selectedElements: 
 --- !u!1 &7709331527549662498
 GameObject:
   m_ObjectHideFlags: 0
