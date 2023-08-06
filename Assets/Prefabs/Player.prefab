@@ -78,11 +78,10 @@ MonoBehaviour:
   - ingredients: 0100000002000000
     result: {fileID: 1219608878419350482, guid: b41160b212a8a9afab3c903b323f9e3c, type: 3}
   - ingredients: 0100000003000000
-    result: {fileID: 5848551582423299879, guid: 93081114e1f6bae49b3bd2603dffad0c, type: 3}
+    result: {fileID: 1219608878419350482, guid: b41160b212a8a9afab3c903b323f9e3c, type: 3}
   - ingredients: 0200000003000000
-    result: {fileID: 5848551582423299879, guid: 1ab04000898b7a2449bf9ba6cbc67a59, type: 3}
+    result: {fileID: 1219608878419350482, guid: b41160b212a8a9afab3c903b323f9e3c, type: 3}
   selectedElements: 
-  heldPotion: {fileID: 0}
 --- !u!61 &4487557115368563922
 BoxCollider2D:
   m_ObjectHideFlags: 0

@@ -47,7 +47,7 @@ public class ElementCombine : MonoBehaviour
             var rigidBody = heldPotion.GetComponent<Rigidbody2D>();
             rigidBody.simulated = true;
 
-            heldPotion.transform.position = transform.position + dir * 3;
+            heldPotion.transform.position = transform.position + dir.normalized * 5;
             heldPotion.transform.SetParent(null, true);
 
             rigidBody.AddForce(dir * 50, ForceMode2D.Impulse);
