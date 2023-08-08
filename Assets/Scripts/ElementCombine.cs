@@ -27,7 +27,12 @@ public class ElementCombine : MonoBehaviour
     public List<Element> selectedElements = new();
 
     GameObject heldPotion = null;
+    Rigidbody2D myBody = null;
     
+    void Start() {
+        myBody = GetComponent<Rigidbody2D>();
+    }
+
     // Update is called once per frame
     void Update()
     {
@@ -50,7 +55,8 @@ public class ElementCombine : MonoBehaviour
             heldPotion.transform.position = transform.position + dir.normalized * 5;
             heldPotion.transform.SetParent(null, true);
 
-            rigidBody.AddForce(dir * 50, ForceMode2D.Impulse);
+            rigidBody.velocity = myBody.velocity / 1.2f;
+            rigidBody.AddForce(dir * 25, ForceMode2D.Impulse);
             rigidBody.AddTorque(25);
 
             heldPotion = null;
