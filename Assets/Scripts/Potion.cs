@@ -1,20 +1,27 @@
+using System;
 using UnityEngine;
 
 public class Potion : MonoBehaviour
 {
-    public GameObject EffectOnShatter = null;
-
-    void OnCollisionEnter2D(Collision2D other)
-    {
-        if(EffectOnShatter != null) {
-            Instantiate(
-                EffectOnShatter,
-                transform.position,
-                Quaternion.identity,
-                null
-            );
+    public void OnHit(GameObject target) {
+        var enemy = target.GetComponent<EnemyScript>();
+        if(enemy != null) {
+            enemy.health -= 1;
         }
+    }
 
-        Destroy(gameObject);
+    DateTime aliveSince;
+    
+    [SerializeField]
+    float durationSeconds = 3;
+
+    void Start() {
+        aliveSince = DateTime.Now;
+    }
+
+    void FixedUpdate() {
+        if((DateTime.Now - aliveSince).Seconds > durationSeconds) {
+            Destroy(gameObject);
+        }
     }
 }

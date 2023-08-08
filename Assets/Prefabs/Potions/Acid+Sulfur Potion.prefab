@@ -9,10 +9,10 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 3983114397957540486}
-  - component: {fileID: 4377735295195840454}
   - component: {fileID: 8161951877330700676}
   - component: {fileID: 9059267930832718250}
   - component: {fileID: 1612587826211337918}
+  - component: {fileID: 681069970044939163}
   m_Layer: 0
   m_Name: Acid+Sulfur Potion
   m_TagString: Untagged
@@ -35,19 +35,6 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &4377735295195840454
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1219608878419350482}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: da70de44fb2a5fa26b866130f5ba53b7, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  EffectOnShatter: {fileID: 5848551582423299879, guid: 06385044436ea3a4091863cf37506eea, type: 3}
 --- !u!212 &8161951877330700676
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -137,3 +124,16 @@ CircleCollider2D:
   m_Offset: {x: 0, y: 0.19336735}
   serializedVersion: 2
   m_Radius: 1.1233671
+--- !u!114 &681069970044939163
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1219608878419350482}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 76167cc5a7516d9fb97adc14d2907dc3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  EffectOnShatter: {fileID: 5848551582423299879, guid: 93081114e1f6bae49b3bd2603dffad0c, type: 3}

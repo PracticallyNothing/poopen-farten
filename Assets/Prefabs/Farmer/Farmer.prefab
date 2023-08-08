@@ -169,7 +169,7 @@ MonoBehaviour:
   - {fileID: 733589022390580603}
   - {fileID: 5182957562219739482}
   m_Bounds:
-    m_Center: {x: 0.23737109, y: -0.0010147095, z: 0.1}
+    m_Center: {x: 0.23737216, y: -0.001014471, z: 0.1}
     m_Extent: {x: 0.6276778, y: 2.1975746, z: 0.000000007450581}
   m_UseBatching: 1
   m_AlwaysUpdate: 1
@@ -310,8 +310,8 @@ MonoBehaviour:
   - {fileID: 3278707651343146609}
   - {fileID: 3466824720817109139}
   m_Bounds:
-    m_Center: {x: 1.2115607, y: -0.27705264, z: 0}
-    m_Extent: {x: 0.58909446, y: 1.8118207, z: 0}
+    m_Center: {x: 1.2115602, y: -0.27705204, z: 0}
+    m_Extent: {x: 0.58909446, y: 1.8118206, z: 0}
   m_UseBatching: 1
   m_AlwaysUpdate: 1
   m_AutoRebind: 0
@@ -546,8 +546,8 @@ MonoBehaviour:
   - {fileID: 6957544280833905014}
   - {fileID: 6957544280480515402}
   m_Bounds:
-    m_Center: {x: 0.18297505, y: -1.3170888, z: 0}
-    m_Extent: {x: 0.76345205, y: 2.0413785, z: 0}
+    m_Center: {x: 0.18297583, y: -1.3170886, z: 0}
+    m_Extent: {x: 0.7634523, y: 2.041378, z: 0}
   m_UseBatching: 1
   m_AlwaysUpdate: 1
   m_AutoRebind: 0
@@ -686,8 +686,8 @@ MonoBehaviour:
   - {fileID: 6957544281769409031}
   - {fileID: 6957544282062479694}
   m_Bounds:
-    m_Center: {x: -0.123386085, y: -0.009255886, z: -0.0000003799796}
-    m_Extent: {x: 0.5537786, y: 1.8353187, z: 2.842171e-14}
+    m_Center: {x: -0.12338668, y: -0.009255409, z: -0.0000003799796}
+    m_Extent: {x: 0.55377877, y: 1.8353187, z: 2.842171e-14}
   m_UseBatching: 1
   m_AlwaysUpdate: 1
   m_AutoRebind: 0
@@ -770,6 +770,7 @@ GameObject:
   - component: {fileID: 1832107149412481133}
   - component: {fileID: 2833860008856808443}
   - component: {fileID: 824810325011650308}
+  - component: {fileID: 152586958256190379}
   m_Layer: 0
   m_Name: Farmer
   m_TagString: Untagged
@@ -873,8 +874,22 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b5acdcc0af0eb095eacab65661ffad87, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  currState: 0
   moveTarget: {x: 0, y: 0}
   speed: 1
+--- !u!114 &152586958256190379
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6957544281269022127}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 82524fba5a2ee3b8fbf283254584f1d4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  health: 5
 --- !u!1 &6957544281332024473
 GameObject:
   m_ObjectHideFlags: 0
@@ -981,8 +996,8 @@ MonoBehaviour:
   - {fileID: 6957544281741164129}
   - {fileID: 6957544280292098580}
   m_Bounds:
-    m_Center: {x: 0.018981934, y: -0.028279305, z: 0.1}
-    m_Extent: {x: 0.5870403, y: 2.155356, z: 0.000000007450581}
+    m_Center: {x: 0.01898259, y: -0.028279305, z: 0.1}
+    m_Extent: {x: 0.58704007, y: 2.155356, z: 0.000000007450581}
   m_UseBatching: 1
   m_AlwaysUpdate: 1
   m_AutoRebind: 0
