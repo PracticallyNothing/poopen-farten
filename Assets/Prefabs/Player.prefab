@@ -50,6 +50,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   canJump: 1
+  delayBetweenJumpsMs: 250
+  jumpForce: 40
+  maxHorizontalVelocity: 15
+  maxMoveForce: 3
 --- !u!114 &5115241827670272727
 MonoBehaviour:
   m_ObjectHideFlags: 0
