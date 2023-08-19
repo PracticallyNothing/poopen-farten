@@ -22,13 +22,15 @@ public class ElementCombine : MonoBehaviour
 {
     [SerializeField]
     public PotionRecipe[] recipes;
-    
+
     [SerializeField]
     public List<Element> selectedElements = new();
 
     GameObject heldPotion = null;
     Rigidbody2D myBody = null;
-    
+
+    bool isAiming = false;
+
     void Start() {
         myBody = GetComponent<Rigidbody2D>();
     }
@@ -46,20 +48,37 @@ public class ElementCombine : MonoBehaviour
         Vector3 dir = Camera.main.ScreenToWorldPoint(Input.mousePosition) - transform.position;
         dir.Normalize();
 
-        if(heldPotion != null && Input.GetMouseButton(0)) {
-            heldPotion.transform.localPosition = new Vector3(-1, 0, -1) - dir;
-        } else if(heldPotion != null && Input.GetMouseButtonUp(0)) {
-            var rigidBody = heldPotion.GetComponent<Rigidbody2D>();
-            rigidBody.simulated = true;
+        if(heldPotion != null) {
+            if(isAiming) {
+                heldPotion.transform.localPosition = new Vector3(-1, 0, -1) - dir;
+            }
 
-            heldPotion.transform.position = transform.position + dir.normalized * 5;
-            heldPotion.transform.SetParent(null, true);
+            // Upon pressing LMB, activate aiming mode.
+            if(Input.GetMouseButtonDown(0)) {
+                isAiming = true;
+            }
 
-            rigidBody.velocity = myBody.velocity / 1.2f;
-            rigidBody.AddForce(dir * 25, ForceMode2D.Impulse);
-            rigidBody.AddTorque(25);
+            // If we're aiming and the user presses RMB, cancel the throw.
+            if(isAiming && Input.GetMouseButtonDown(1)) {
+                heldPotion.transform.localPosition = new Vector3(-1, 0, 0); // Reset the potion's location.
+                isAiming = false;
+            }
 
-            heldPotion = null;
+            // If we're aiming and the user lets go of LMB, do the actual throw.
+            if(isAiming && Input.GetMouseButtonUp(0)) {
+                var rigidBody = heldPotion.GetComponent<Rigidbody2D>();
+                rigidBody.simulated = true;
+
+                heldPotion.transform.position = transform.position + dir.normalized * 5;
+                heldPotion.transform.SetParent(null, true);
+
+                rigidBody.velocity = myBody.velocity / 1.2f;
+                rigidBody.AddForce(dir * 25, ForceMode2D.Impulse);
+                rigidBody.AddTorque(25);
+
+                heldPotion = null;
+                isAiming = false;
+            }
         }
     }
 
@@ -106,7 +125,7 @@ public class ElementCombine : MonoBehaviour
     {
         if(recipe == null)
             return;
-        
+
         heldPotion = Instantiate(
             recipe.result,
             transform.position + new Vector3(-1, 0, 0),
