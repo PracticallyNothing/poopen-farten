@@ -23,7 +23,7 @@ public class FarmerScript : MonoBehaviour
 
     // Location the farmer will try to move to in his moving state.
     // When the point is reached, the farmer stops.
-    
+
     Vector2 moveStart = new (0, 0);
 
     [SerializeField]
@@ -54,7 +54,10 @@ public class FarmerScript : MonoBehaviour
             moveStart = transform.position;
             moveTarget = transform.position + new Vector3(random.Next(0, 5) * 2 - 5, 0);
             animator.SetBool("Moving", true);
-            transform.localScale = new Vector3(0.7f * Math.Sign((moveStart - moveTarget).x), 0.7f, 1);
+
+            Vector3 scale = transform.localScale;
+            scale.x = Math.Abs(scale.x) * Math.Sign((moveStart - moveTarget).x);
+            transform.localScale = scale;
         }
         else if (currState == FarmerState.Moving && dotProduct < 0)
         {
