@@ -311,7 +311,7 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1869184159010603622}
-  m_LocalRotation: {x: 0, y: 0, z: -0.75987345, w: 0.6500711}
+  m_LocalRotation: {x: -0, y: -0, z: -0.56517017, w: 0.82497436}
   m_LocalPosition: {x: -0.017769603, y: 0.59824353, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
@@ -319,7 +319,7 @@ Transform:
   - {fileID: 727007104271534558}
   m_Father: {fileID: 3802206447400750311}
   m_RootOrder: 0
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: -99.519}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: -68.828}
 --- !u!1 &2039561097725459606
 GameObject:
   m_ObjectHideFlags: 0
@@ -470,7 +470,7 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2326189125097444265}
-  m_LocalRotation: {x: 0, y: 0, z: -0.74000597, w: 0.6726003}
+  m_LocalRotation: {x: -0, y: -0, z: -0.48469812, w: 0.87468153}
   m_LocalPosition: {x: -0.017769603, y: 0.59824353, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
@@ -478,7 +478,7 @@ Transform:
   - {fileID: 5667096288686474105}
   m_Father: {fileID: 1341095939031285572}
   m_RootOrder: 0
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: -57.985}
 --- !u!1 &2340263072809815228
 GameObject:
   m_ObjectHideFlags: 0
@@ -503,7 +503,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2340263072809815228}
   m_LocalRotation: {x: 0, y: 0, z: -0.9796895, w: 0.20052066}
-  m_LocalPosition: {x: 0.8308922, y: 0.18424332, z: 0}
+  m_LocalPosition: {x: 0.8308922, y: 0.1842433, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -892,8 +892,8 @@ MonoBehaviour:
   - {fileID: 5667096288686474105}
   - {fileID: 1754728096669454289}
   m_Bounds:
-    m_Center: {x: -0.0001899898, y: -0.00056505203, z: 0}
-    m_Extent: {x: 0.25969005, y: 0.72443503, z: 0}
+    m_Center: {x: 0.30591485, y: 0.11813885, z: 0}
+    m_Extent: {x: 0.48955476, y: 0.64918417, z: 0}
   m_UseBatching: 1
   m_AlwaysUpdate: 1
   m_AutoRebind: 0
@@ -1001,8 +1001,8 @@ MonoBehaviour:
   - {fileID: 727007104271534558}
   - {fileID: 7459747481867778392}
   m_Bounds:
-    m_Center: {x: -0.015555352, y: 0.004479885, z: 0}
-    m_Extent: {x: 0.26461282, y: 0.7183209, z: 0}
+    m_Center: {x: 0.2371254, y: 0.08282089, z: 0}
+    m_Extent: {x: 0.43776953, y: 0.6731025, z: 0}
   m_UseBatching: 1
   m_AlwaysUpdate: 1
   m_AutoRebind: 0
@@ -1194,7 +1194,8 @@ GameObject:
   - component: {fileID: 7042372619344095934}
   - component: {fileID: 4168352449223898173}
   - component: {fileID: 3172003609111799252}
-  - component: {fileID: 5835146765316596884}
+  - component: {fileID: 4588382763216266123}
+  - component: {fileID: 6198380448709447750}
   m_Layer: 0
   m_Name: Boar
   m_TagString: Enemy
@@ -1360,7 +1361,7 @@ Rigidbody2D:
   m_SleepingMode: 1
   m_CollisionDetection: 0
   m_Constraints: 4
---- !u!114 &5835146765316596884
+--- !u!114 &4588382763216266123
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -1369,12 +1370,25 @@ MonoBehaviour:
   m_GameObject: {fileID: 5564839463432515037}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: b5acdcc0af0eb095eacab65661ffad87, type: 3}
+  m_Script: {fileID: 11500000, guid: 8a838b4745bf29b2ba72a9ddf8f670d6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   currState: 0
-  moveTarget: {x: 0, y: 0}
-  speed: 1
+  walkSpeed: 0.35
+  runSpeed: 1
+--- !u!114 &6198380448709447750
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5564839463432515037}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 82524fba5a2ee3b8fbf283254584f1d4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  health: 5
 --- !u!1 &5617618150030482818
 GameObject:
   m_ObjectHideFlags: 0
