@@ -1,9 +1,4 @@
 using System;
-using System.Collections;
-using System.Collections.Generic;
-using System.Security.Cryptography;
-using Unity.VisualScripting;
-using UnityEditor.Animations;
 using UnityEngine;
 
 enum BoarState
@@ -54,17 +49,24 @@ public class BoarScript : MonoBehaviour
 
         // If the player is way too far away, we definitely don't see them.
         // Don't waste time firing a ray.
-        if (dirToPlayer.magnitude > 20 * 4)
+        if (dirToPlayer.magnitude > 10 * 4)
         {
-            Debug.Log(String.Format("⛰ BROOO, you're way too far! {0}", dirToPlayer.magnitude));
             return false;
         }
 
-        var hitResult = Physics2D.Raycast(transform.position, dirToPlayer.normalized, 15 * 4);
-        bool rayHitPlayer = hitResult.collider.gameObject.CompareTag("Player");
+        // NOTE(Mario):
+        //   По някаква причина, макар да прочетох че Ray, изстрелян вътре в Collider,
+        //   не се удря в този Collider, винаги лъчът се удря в глигана първо. Затова правя RaycastAll()
+        //   и проверявам втория елемент във hitResult - първият винаги е самият глиган.
+        var hitResult = Physics2D.RaycastAll(transform.position, dirToPlayer.normalized, 9 * 4);
+        Debug.DrawRay(transform.position, dirToPlayer);
 
-        Debug.DrawRay(transform.position, dirToPlayer.normalized, rayHitPlayer ? Color.green : Color.red);
+        if (hitResult.Length == 1)
+        {
+            return false;
+        }
 
+        bool rayHitPlayer = hitResult[1].collider.gameObject.CompareTag("Player");
         return rayHitPlayer;
     }
 
@@ -73,7 +75,9 @@ public class BoarScript : MonoBehaviour
     {
         Vector3 scale = transform.localScale;
         Vector2 pos = transform.position;
-        scale.x = Math.Abs(scale.x) * Math.Sign((point - pos).x);
+
+        float dir = (pos - point).normalized.x;
+        scale.x = Math.Abs(scale.x) * Math.Sign(dir == 0 ? 1 : dir);
         transform.localScale = scale;
     }
 
@@ -81,15 +85,21 @@ public class BoarScript : MonoBehaviour
     void FixedUpdate()
     {
         // If the boar is dead, stop running logic for it.
-        if(currState == BoarState.Dead) {
+        if (currState == BoarState.Dead)
+        {
             return;
         }
 
         // NOTE(Mario):
         //   Според този код, веднъж щом те е видял, глиганът винаги знае къде си.
         //   Това ОК ли е?
-        if (!agitated && SeesPlayer()) {
+        if (!agitated && SeesPlayer())
+        {
             Debug.Log("BRRR IM ANGY 😠");
+            TurnTowardsPoint(player.transform.position);
+            animator.SetBool("Moving", true);
+            animator.SetBool("Running", true);
+            myBody.drag = 0.8f;
             agitated = true;
         }
         else if (agitated && currState == BoarState.Moving)
@@ -108,23 +118,18 @@ public class BoarScript : MonoBehaviour
             transform.position,
             myBody.velocity,
             myBody.velocity.magnitude < 0.05 ? Color.red : Color.green);
+        Debug.DrawLine(transform.position, moveTarget, Color.magenta);
 
         switch (currState)
         {
             case BoarState.Dead:
                 return;
             case BoarState.Idle:
-                if (agitated)
-                {
-                    TurnTowardsPoint(player.transform.position);
-                    animator.SetBool("Moving", true);
-                    animator.SetBool("Running", true);
-                }
-                else if (lastMoveTime == null || DateTime.Now - lastMoveTime > new TimeSpan(0, 0, 5))
+                if (lastMoveTime == null || DateTime.Now - lastMoveTime > new TimeSpan(0, 0, 5))
                 {
                     lastMoveTime = DateTime.Now;
                     moveStart = transform.position;
-                    moveTarget = transform.position + new Vector3(random.Next(1, 4) * 5 - 12.5f, 0);
+                    moveTarget = transform.position + new Vector3(random.Next(1, 3) * 20 - 30, 0);
                     TurnTowardsPoint(moveTarget);
                     currState = BoarState.Moving;
                     animator.SetBool("Moving", true);
@@ -135,12 +140,15 @@ public class BoarScript : MonoBehaviour
 
                 Vector2 pos = transform.position;
 
-                Vector2 moveDir = moveTarget - moveStart;
-                Vector2 targetDir = moveTarget - pos;
+                Vector2 moveDir = (moveTarget - moveStart).normalized;
+                Vector2 targetDir = (moveTarget - pos).normalized;
 
                 myBody.AddForce(
                     new Vector2(targetDir.x, 0).normalized * moveForce,
                     ForceMode2D.Impulse);
+
+                Debug.DrawRay(transform.position + Vector3.one * 0.2f, moveDir * 2, Color.magenta);
+                Debug.DrawRay(transform.position - Vector3.one * 0.2f, targetDir * 3, Color.yellow);
 
                 // NOTE(Mario):
                 //   Как работи Vector2.Dot():
@@ -150,21 +158,30 @@ public class BoarScript : MonoBehaviour
                 //     Vector2.Dot(←, ↑) = 0
                 //       или
                 //     Vector2.Dot(←, ↓) = 0 (т.е векторите са под 90° ъгъл)
-                bool hasPassedTarget = Vector2.Dot(moveDir.normalized, targetDir.normalized) < 0;
+                bool hasPassedTarget = Vector2.Dot(moveDir, targetDir) < 0;
 
-                if (hasPassedTarget)
-                {
-                    currState = agitated ? BoarState.SlowingDown : BoarState.Idle;
-                    // Stop moving if the boar is agitated, keep running otherwise.
-                    animator.SetBool("Moving", agitated);
+                if (!hasPassedTarget)
+                    break;
+
+                if (!agitated) {
+                    currState = BoarState.Idle;
+                } else {
+                    currState = BoarState.SlowingDown;
+                    animator.SetBool("Moving", true);
                     animator.SetBool("Slowing Down", true);
+                    myBody.drag = 0.3f;
                 }
+
                 break;
             case BoarState.SlowingDown:
+                Debug.Log(String.Format("🟥 Slowing down! {0}", myBody.velocity.magnitude));
                 if (myBody.velocity.magnitude < 0.05)
                 {
+                    myBody.drag = 0.7f;
+                    Debug.Log(String.Format("🟢 Moving again!!!!"));
+                    moveStart = transform.position;
                     currState = BoarState.Moving;
-                    animator.SetBool("SlowingDown", false);
+                    animator.SetBool("Slowing Down", false);
                     TurnTowardsPoint(player.transform.position);
                 }
                 break;
