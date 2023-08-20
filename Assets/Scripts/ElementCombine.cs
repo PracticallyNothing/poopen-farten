@@ -78,6 +78,10 @@ public class ElementCombine : MonoBehaviour
 
                 heldPotion = null;
                 isAiming = false;
+
+                // Only clear the elements after throwing so the player knows what potion
+                // they've created.
+                selectedElements.Clear();
             }
         }
     }
@@ -110,11 +114,8 @@ public class ElementCombine : MonoBehaviour
           .Where((p) => p.ingredients.Length == p.ingredients.Intersect(elemsSet).Count())
           .FirstOrDefault();
 
-        // If a potion that matches the player's combination exists,
-        // spawn it and then clear the list of elements.
+        // If a potion that matches the player's combination exists, spawn it.
         if(foundRecipe != null) {
-            Debug.Log("Found recipe!");
-            selectedElements.Clear();
             Combine(foundRecipe);
         }
 
@@ -135,6 +136,5 @@ public class ElementCombine : MonoBehaviour
 
         // Disable physics and collision on the potion.
         heldPotion.GetComponent<Rigidbody2D>().simulated = false;
-        // heldPotion.GetComponent<CircleCollider2D>().enabled = false;
     }
 }
