@@ -29,6 +29,7 @@ public class BoarScript : MonoBehaviour
 
     System.Random random = new();
 
+    [SerializeField] float viewRange = 40;
     [SerializeField] float walkSpeed = 0.35f;
     [SerializeField] float runSpeed = 1f;
 
@@ -52,7 +53,7 @@ public class BoarScript : MonoBehaviour
 
         // If the player is way too far away, we definitely don't see them.
         // Don't waste time firing a ray.
-        if (dirToPlayer.magnitude > 10 * 4)
+        if (dirToPlayer.magnitude > viewRange)
         {
             return false;
         }
@@ -61,7 +62,7 @@ public class BoarScript : MonoBehaviour
         //   По някаква причина, макар да прочетох че Ray, изстрелян вътре в Collider,
         //   не се удря в този Collider, винаги лъчът се удря в глигана първо. Затова правя RaycastAll()
         //   и проверявам втория елемент във hitResult - първият винаги е самият глиган.
-        var hitResult = Physics2D.RaycastAll(transform.position, dirToPlayer.normalized, 9 * 4);
+        var hitResult = Physics2D.RaycastAll(transform.position, dirToPlayer.normalized, 0.9f * viewRange);
         Debug.DrawRay(transform.position, dirToPlayer);
 
         if (hitResult.Length == 1)
@@ -117,6 +118,13 @@ public class BoarScript : MonoBehaviour
         }
         else if (agitated && currState == BoarState.Moving)
             moveTarget = player.transform.position;
+        else if (agitated && SeesPlayer() == false)
+        {
+            Debug.Log("Uspokoih sa");
+            animator.SetBool("Running", false);
+            agitated = false;
+        }
+            
 
         // We can die at any time, so we handle it outside the switch-case.
         if (enemyPart.health <= 0 && currState != BoarState.Dead)
@@ -171,6 +179,8 @@ public class BoarScript : MonoBehaviour
 
                 if (!hasPassedTarget)
                     break;
+                else
+                    UpdateMoveDirection();
 
                 if (!agitated) {
                     currState = BoarState.Idle;
@@ -196,6 +206,17 @@ public class BoarScript : MonoBehaviour
                     TurnTowardsPoint(player.transform.position);
                 }
                 break;
+        }
+    }
+
+    private void OnTriggerEnter2D(Collider2D collision)
+    {
+        if(collision.CompareTag("Floor") && !agitated)
+        {
+            Debug.Log(moveTarget + " tuka iskam ma ne moje");
+            moveTarget = moveTarget - 2*(moveTarget - moveStart);
+            UpdateMoveDirection();
+            Debug.Log(moveTarget);
         }
     }
 }

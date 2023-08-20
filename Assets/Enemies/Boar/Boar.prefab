@@ -1196,6 +1196,7 @@ GameObject:
   - component: {fileID: 3172003609111799252}
   - component: {fileID: 4588382763216266123}
   - component: {fileID: 6198380448709447750}
+  - component: {fileID: 7822141760121873018}
   m_Layer: 0
   m_Name: Boar
   m_TagString: Enemy
@@ -1338,7 +1339,7 @@ BoxCollider2D:
     adaptiveTiling: 0
   m_AutoTiling: 0
   serializedVersion: 2
-  m_Size: {x: 4.03, y: 2.3036876}
+  m_Size: {x: 4, y: 2.3}
   m_EdgeRadius: 0.05
 --- !u!50 &3172003609111799252
 Rigidbody2D:
@@ -1374,6 +1375,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   currState: 0
+  viewRange: 40
   walkSpeed: 0.35
   runSpeed: 1
 --- !u!114 &6198380448709447750
@@ -1389,6 +1391,32 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   health: 5
+--- !u!61 &7822141760121873018
+BoxCollider2D:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5564839463432515037}
+  m_Enabled: 1
+  m_Density: 1
+  m_Material: {fileID: 0}
+  m_IsTrigger: 1
+  m_UsedByEffector: 0
+  m_UsedByComposite: 0
+  m_Offset: {x: -3, y: -0.55}
+  m_SpriteTilingProperty:
+    border: {x: 0, y: 0, z: 0, w: 0}
+    pivot: {x: 0, y: 0}
+    oldSize: {x: 0, y: 0}
+    newSize: {x: 0, y: 0}
+    adaptiveTilingThreshold: 0
+    drawMode: 0
+    adaptiveTiling: 0
+  m_AutoTiling: 0
+  serializedVersion: 2
+  m_Size: {x: 0.5, y: 2}
+  m_EdgeRadius: 0
 --- !u!1 &5617618150030482818
 GameObject:
   m_ObjectHideFlags: 0
