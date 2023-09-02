@@ -118,13 +118,7 @@ public class BoarScript : MonoBehaviour
         }
         else if (agitated && currState == BoarState.Moving)
             moveTarget = player.transform.position;
-        else if (agitated && SeesPlayer() == false)
-        {
-            Debug.Log("Uspokoih sa");
-            animator.SetBool("Running", false);
-            agitated = false;
-        }
-            
+
 
         // We can die at any time, so we handle it outside the switch-case.
         if (enemyPart.health <= 0 && currState != BoarState.Dead)
@@ -179,8 +173,6 @@ public class BoarScript : MonoBehaviour
 
                 if (!hasPassedTarget)
                     break;
-                else
-                    UpdateMoveDirection();
 
                 if (!agitated) {
                     currState = BoarState.Idle;
