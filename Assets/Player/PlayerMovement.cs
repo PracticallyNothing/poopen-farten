@@ -4,19 +4,13 @@ using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEngine;
 
+[RequireComponent(typeof(Rigidbody2D))]
 public class PlayerMovement : MonoBehaviour
 {
     // Whether hitting the Spacebar does anything.
     public bool canJump = true;
 
     Rigidbody2D myRigidbody = null;
-
-    // Time of last jump. Used in conjunction with delayBetweenJumpsMs.
-    DateTime? lastJump = null;
-
-    /// Time to wait before allowing the player to jump again.
-    /// Used to counteract spam-jumping.
-    [SerializeField] int delayBetweenJumpsMs = 250;
 
     /// How high the character jumps.
     [SerializeField] float jumpForce = 40;
@@ -37,11 +31,7 @@ public class PlayerMovement : MonoBehaviour
 
     void FixedUpdate()
     {
-        if (Input.GetKey(KeyCode.Space) && canJump &&
-            (lastJump == null
-             || DateTime.Now - lastJump > new TimeSpan(0, 0, 0, 0, delayBetweenJumpsMs)))
-        {
-            lastJump = DateTime.Now;
+        if (Input.GetKey(KeyCode.Space) && canJump) {
             myRigidbody.AddForce(new Vector3(0, jumpForce, 0), ForceMode2D.Impulse);
             canJump = false;
         }
@@ -50,12 +40,8 @@ public class PlayerMovement : MonoBehaviour
         float moveForce = Math.Clamp(maxHorizontalVelocity - Math.Abs(vel.x), 0, maxMoveForce);
 
         if (Input.GetKey(KeyCode.A))
-        {
             myRigidbody.AddForce(new Vector3(-moveForce, 0, 0), ForceMode2D.Impulse);
-        }
         else if (Input.GetKey(KeyCode.D))
-        {
             myRigidbody.AddForce(new Vector3(moveForce, 0, 0), ForceMode2D.Impulse);
-        }
     }
 }
