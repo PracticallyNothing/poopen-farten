@@ -6,15 +6,8 @@ enum WolfState
     Idle, Moving, SlowingDown, Dead
 }
 
-public class WolfScript : MonoBehaviour
+public class WolfScript : EnemyScript
 {
-    Rigidbody2D myBody = null;
-    Animator animator = null;
-
-    GameObject player = null;
-
-    EnemyScript enemyPart = null;
-
     [SerializeField]
     WolfState currState = WolfState.Idle;
 
@@ -29,61 +22,8 @@ public class WolfScript : MonoBehaviour
 
     System.Random random = new();
 
-    [SerializeField] float viewRange = 40;
-    [SerializeField] float walkSpeed = 0.35f;
-    [SerializeField] float runSpeed = 1f;
-
     // The direction towards which the Wolf is walking/running.
     Vector2 moveDirection;
-
-    // Start is called before the first frame update
-    void Start()
-    {
-        myBody = GetComponent<Rigidbody2D>();
-        animator = GetComponent<Animator>();
-        enemyPart = GetComponent<EnemyScript>();
-
-        player = GameObject.Find("Player");
-    }
-
-    // Check whether the Wolf can see the player.
-    bool SeesPlayer()
-    {
-        Vector2 dirToPlayer = player.transform.position - transform.position;
-
-        // If the player is way too far away, we definitely don't see them.
-        // Don't waste time firing a ray.
-        if (dirToPlayer.magnitude > viewRange)
-        {
-            return false;
-        }
-
-        // NOTE(Mario):
-        //   По някаква причина, макар да прочетох че Ray, изстрелян вътре в Collider,
-        //   не се удря в този Collider, винаги лъчът се удря в вълка първо. Затова правя RaycastAll()
-        //   и проверявам втория елемент във hitResult - първият винаги е самият вълк.
-        var hitResult = Physics2D.RaycastAll(transform.position, dirToPlayer.normalized, 0.9f * viewRange);
-        Debug.DrawRay(transform.position, dirToPlayer);
-
-        if (hitResult.Length == 1)
-        {
-            return false;
-        }
-
-        bool rayHitPlayer = hitResult[1].collider.gameObject.CompareTag("Player");
-        return rayHitPlayer;
-    }
-
-    // Mirror the Wolf so it's looking at the given point.
-    void TurnTowardsPoint(Vector2 point)
-    {
-        Vector3 scale = transform.localScale;
-        Vector2 pos = transform.position;
-
-        float dir = (pos - point).normalized.x;
-        scale.x = Math.Abs(scale.x) * Math.Sign(dir == 0 ? 1 : dir);
-        transform.localScale = scale;
-    }
 
     // Change where the Wolf is moving to.
     void UpdateMoveDirection() {
@@ -121,7 +61,7 @@ public class WolfScript : MonoBehaviour
 
 
         // We can die at any time, so we handle it outside the switch-case.
-        if (enemyPart.health <= 0 && currState != WolfState.Dead)
+        if (health <= 0 && currState != WolfState.Dead)
         {
             myBody.simulated = false;
             currState = WolfState.Dead;
