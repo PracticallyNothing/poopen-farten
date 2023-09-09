@@ -4,8 +4,11 @@ public class PotionThrow : MonoBehaviour
 {
     public GameObject EffectOnShatter = null;
 
-    void OnCollisionEnter2D(Collision2D other)
+    void OnTriggerEnter2D(Collider2D other)
     {
+        if(other.CompareTag("Potion"))
+            return;
+
         if(EffectOnShatter != null) {
             Instantiate(
                 EffectOnShatter,
