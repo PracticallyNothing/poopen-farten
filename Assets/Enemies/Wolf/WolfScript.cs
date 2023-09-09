@@ -3,8 +3,20 @@ using UnityEngine;
 
 enum WolfState
 {
-    Idle, Moving, SlowingDown, Dead
+    Idle,
+    Moving,
+    Dead,
+
+    PreparingLunge,
+    Lunging,
+    Landing
 }
+
+// Вълкът има 4 състояния, когато се ядоса:
+// 1. твърде далеч е от играча и трябва да се приближи
+// 2. достатъчно близо е до играча, за да скочи към него, подготвя се да скочи
+// 3. лети във въздуха след като е скочил
+// 4. приземява се след скока си
 
 public class WolfScript : EnemyScript
 {
@@ -25,6 +37,14 @@ public class WolfScript : EnemyScript
     // The direction towards which the Wolf is walking/running.
     Vector2 moveDirection;
 
+	public void Lunge() {
+		// TODO(Mario):
+		//   В момента вълка перфектно те прескача, а идеята е да минава на
+		//   височина лицето ти, освен ако не клекнеш.
+		myBody.AddForce(new Vector3((moveDirection * 40).x, 30, 0), ForceMode2D.Impulse);
+		currState = WolfState.Lunging;
+	}
+
     // Change where the Wolf is moving to.
     void UpdateMoveDirection() {
         if(agitated) {
@@ -36,6 +56,9 @@ public class WolfScript : EnemyScript
             TurnTowardsPoint(moveTarget);
         }
     }
+
+    /// How close the wolf needs to get to the player before jumping at him.
+    [SerializeField] float maxDistanceBeforeLunge = 10;
 
     // Run the logic of the Wolf.
     void FixedUpdate()
@@ -54,6 +77,7 @@ public class WolfScript : EnemyScript
             animator.SetBool("Moving", true);
             animator.SetBool("Running", true);
             UpdateMoveDirection();
+			currState = WolfState.Moving;
             myBody.drag = 0.8f;
         }
         else if (agitated && currState == WolfState.Moving)
@@ -91,53 +115,57 @@ public class WolfScript : EnemyScript
                 }
                 break;
             case WolfState.Moving:
-                float moveForce = agitated ? runSpeed : walkSpeed;
-
                 Vector2 pos = transform.position;
                 Vector2 targetDir = (moveTarget - pos).normalized;
 
-                myBody.AddForce(moveDirection * moveForce, ForceMode2D.Impulse);
-
-                Debug.DrawRay(transform.position + Vector3.one * 0.2f, moveDirection * 2, Color.magenta);
-                Debug.DrawRay(transform.position - Vector3.one * 0.2f, targetDir * 3, Color.yellow);
-
-                // NOTE(Mario):
-                //   Как работи Vector2.Dot():
-                //     Vector2.Dot(←, ←) = 1
-                //     Vector2.Dot(←, →) = -1
-                //
-                //     Vector2.Dot(←, ↑) = 0
-                //       или
-                //     Vector2.Dot(←, ↓) = 0 (т.е векторите са под 90° ъгъл)
-                bool hasPassedTarget = Vector2.Dot(moveDirection, targetDir) < 0;
-
-                if (!hasPassedTarget)
-                    break;
+                float moveForce = agitated ? runSpeed : walkSpeed;
+				/// Calculate the "final force" that will be applied, which is the moveForce, limited by the maximum velocity.
+                float finalForce = Math.Min(
+					// NOTE(Mario):
+					//   (maxVelocity - currentVelocity) може да стане отрицателно и много бързо става много смешно - вълкът
+					//   хвръква на хиляди единици в грешната посока. Затова, ако е под 0, просто го заместваме с нула.
+					Math.Max(0, maxVelocity - myBody.velocity.magnitude),
+					moveForce
+				);
+                myBody.AddForce(moveDirection * finalForce, ForceMode2D.Impulse);
 
                 if (!agitated) {
                     currState = WolfState.Idle;
                     animator.SetBool("Moving", false);
-                } else if(myBody.velocity.magnitude >= 8) {
-                    currState = WolfState.SlowingDown;
-                    animator.SetBool("Moving", true);
-                    animator.SetBool("Slowing Down", true);
-                    myBody.drag = 0.05f;
                 }
 
+				float distToPlayer = (
+					player.transform.position - transform.position
+				).magnitude;
+				Debug.Log(string.Format("distToPlayer: {0}", distToPlayer));
+
+				if(distToPlayer <= maxDistanceBeforeLunge) {
+					animator.SetBool("Lunging", true);
+					myBody.velocity = Vector3.zero;
+					currState = WolfState.PreparingLunge;
+					break;
+				}
+
+				UpdateMoveDirection();
+				moveStart = transform.position;
+				TurnTowardsPoint(player.transform.position);
                 break;
-            case WolfState.SlowingDown:
-                Debug.Log(String.Format("🟥 Slowing down! {0}", myBody.velocity.magnitude));
-                if (myBody.velocity.magnitude < 0.05)
-                {
-                    UpdateMoveDirection();
-                    myBody.drag = 0.7f;
-                    Debug.Log(String.Format("🟢 Moving again!!!!"));
-                    moveStart = transform.position;
-                    currState = WolfState.Moving;
-                    animator.SetBool("Slowing Down", false);
-                    TurnTowardsPoint(player.transform.position);
-                }
-                break;
+		    case WolfState.PreparingLunge:
+				break;
+		    case WolfState.Lunging:
+				if(Vector2.Dot(myBody.velocity.normalized, new Vector2(0, -1)) >= 0.3) {
+					animator.SetBool("Lunging", false);
+					currState = WolfState.Landing;
+				}
+				break;
+			case WolfState.Landing:
+				if(myBody.velocity.y < 0.3) {
+					moveStart = transform.position;
+					TurnTowardsPoint(player.transform.position);
+					UpdateMoveDirection();
+					currState = WolfState.Moving;
+				}
+				break;
         }
     }
 }

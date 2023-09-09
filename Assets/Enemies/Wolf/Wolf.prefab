@@ -1389,10 +1389,12 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   health: 5
+  maxVelocity: 15
   viewRange: 40
   walkSpeed: 0.35
   runSpeed: 0.6
   currState: 0
+  maxDistanceBeforeLunge: 10
 --- !u!1 &5442747645733853305
 GameObject:
   m_ObjectHideFlags: 0

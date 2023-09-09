@@ -12,6 +12,8 @@ public class EnemyScript : MonoBehaviour
     protected Animator animator = null;
     protected static GameObject player = null;
 
+	[SerializeField] protected float maxVelocity = 15;
+
     [SerializeField] protected float viewRange = 40;
     [SerializeField] protected float walkSpeed = 0.35f;
     [SerializeField] protected float runSpeed = 1f;
