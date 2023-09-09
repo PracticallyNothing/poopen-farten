@@ -12,11 +12,8 @@ enum FarmerState
     Moving
 }
 
-public class FarmerScript : MonoBehaviour
+public class FarmerScript : EnemyScript
 {
-    Rigidbody2D myBody = null;
-    Animator animator = null;
-
     [SerializeField]
     FarmerState currState = FarmerState.Idle;
     DateTime lastMoveTime = DateTime.Now;
@@ -25,20 +22,12 @@ public class FarmerScript : MonoBehaviour
     // When the point is reached, the farmer stops.
 
     Vector2 moveStart = new (0, 0);
-
-    [SerializeField]
     Vector2 moveTarget = new(0, 0);
 
     System.Random random = new();
 
     [SerializeField]
     float speed = 1;
-    // Start is called before the first frame update
-    void Start()
-    {
-        myBody = GetComponent<Rigidbody2D>();
-        animator = GetComponent<Animator>();
-    }
 
     // Update is called once per frame
     void FixedUpdate()
