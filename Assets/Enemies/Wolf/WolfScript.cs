@@ -140,15 +140,4 @@ public class WolfScript : EnemyScript
                 break;
         }
     }
-
-    private void OnTriggerEnter2D(Collider2D collision)
-    {
-        if(collision.CompareTag("Floor") && !agitated)
-        {
-            Debug.Log(moveTarget + " tuka iskam ma ne moje");
-            moveTarget = moveTarget - 2*(moveTarget - moveStart);
-            UpdateMoveDirection();
-            Debug.Log(moveTarget);
-        }
-    }
 }

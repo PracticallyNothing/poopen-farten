@@ -16,7 +16,7 @@ public class EnemyScript : MonoBehaviour
     [SerializeField] protected float walkSpeed = 0.35f;
     [SerializeField] protected float runSpeed = 1f;
 
-    private void OnTriggerEnter2D(Collider2D other) {
+    protected void OnTriggerEnter2D(Collider2D other) {
         if(other.CompareTag("Potion")) {
             other.gameObject.GetComponent<Potion>().OnHit(gameObject);
         }

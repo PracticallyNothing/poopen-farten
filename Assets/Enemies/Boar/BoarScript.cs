@@ -126,29 +126,16 @@ public class BoarScript : EnemyScript
 
                 break;
             case BoarState.SlowingDown:
-                Debug.Log(String.Format("🟥 Slowing down! {0}", myBody.velocity.magnitude));
                 if (myBody.velocity.magnitude < 0.05)
                 {
                     UpdateMoveDirection();
                     myBody.drag = 0.7f;
-                    Debug.Log(String.Format("🟢 Moving again!!!!"));
                     moveStart = transform.position;
                     currState = BoarState.Moving;
                     animator.SetBool("Slowing Down", false);
                     TurnTowardsPoint(player.transform.position);
                 }
                 break;
-        }
-    }
-
-    private void OnTriggerEnter2D(Collider2D collision)
-    {
-        if(collision.CompareTag("Floor") && !agitated)
-        {
-            Debug.Log(moveTarget + " tuka iskam ma ne moje");
-            moveTarget = moveTarget - 2*(moveTarget - moveStart);
-            UpdateMoveDirection();
-            Debug.Log(moveTarget);
         }
     }
 }
