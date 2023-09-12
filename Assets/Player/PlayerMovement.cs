@@ -29,19 +29,42 @@ public class PlayerMovement : MonoBehaviour
         myRigidbody = GetComponent<Rigidbody2D>();
     }
 
+    bool prevCrouching = false;
+
     void FixedUpdate()
     {
-        if (Input.GetKey(KeyCode.Space) && canJump) {
+        bool crouching = Input.GetKey(KeyCode.S);
+
+        if (Input.GetKey(KeyCode.Space) && canJump && !crouching) {
             myRigidbody.AddForce(new Vector3(0, jumpForce, 0), ForceMode2D.Impulse);
             canJump = false;
         }
 
+
+        Vector2 scale = transform.localScale;
+        scale.y = crouching ? 0.6f : 1f;
+        transform.localScale = scale;
+
+        bool justCrouched =  crouching && !prevCrouching;
+        bool justStoodUp  = !crouching &&  prevCrouching;
+
+        Vector2 pos = transform.localPosition;
+
+        if(justCrouched)     pos.y -= GetComponent<BoxCollider2D>().size.y * 0.6f * 0.6f;
+        else if(justStoodUp) pos.y += GetComponent<BoxCollider2D>().size.y * 0.6f * 0.6f;
+
+        if(justCrouched || justStoodUp) transform.localPosition = pos;
+
+
         Vector2 vel = myRigidbody.velocity;
-        float moveForce = Math.Clamp(maxHorizontalVelocity - Math.Abs(vel.x), 0, maxMoveForce);
+        float moveForce = Math.Clamp(
+            maxHorizontalVelocity / (crouching ? 2 : 1) - Math.Abs(vel.x), 0, maxMoveForce);
 
         if (Input.GetKey(KeyCode.A))
             myRigidbody.AddForce(new Vector3(-moveForce, 0, 0), ForceMode2D.Impulse);
         else if (Input.GetKey(KeyCode.D))
             myRigidbody.AddForce(new Vector3(moveForce, 0, 0), ForceMode2D.Impulse);
+
+        prevCrouching = crouching;
     }
 }
