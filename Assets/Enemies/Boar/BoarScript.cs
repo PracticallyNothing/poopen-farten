@@ -91,12 +91,19 @@ public class BoarScript : EnemyScript
                 }
                 break;
             case BoarState.Moving:
-                float moveForce = agitated ? runSpeed : walkSpeed;
-
                 Vector2 pos = transform.position;
                 Vector2 targetDir = (moveTarget - pos).normalized;
+                float moveForce = agitated ? runSpeed : walkSpeed;
 
-                myBody.AddForce(moveDirection * moveForce, ForceMode2D.Impulse);
+                /// Calculate the "final force" that will be applied, which is the moveForce, limited by the maximum velocity.
+                float finalForce = Math.Min(
+                    // NOTE(Mario):
+                    //   (maxVelocity - currentVelocity) може да стане отрицателно и много бързо става много смешно - вълкът
+                    //   хвръква на хиляди единици в грешната посока. Затова, ако е под 0, просто го заместваме с нула.
+                    Math.Max(0, maxVelocity - myBody.velocity.magnitude),
+                    moveForce
+                );
+                myBody.AddForce(moveDirection * finalForce, ForceMode2D.Impulse);
 
                 Debug.DrawRay(transform.position + Vector3.one * 0.2f, moveDirection * 2, Color.magenta);
                 Debug.DrawRay(transform.position - Vector3.one * 0.2f, targetDir * 3, Color.yellow);
@@ -109,7 +116,7 @@ public class BoarScript : EnemyScript
                 //     Vector2.Dot(←, ↑) = 0
                 //       или
                 //     Vector2.Dot(←, ↓) = 0 (т.е векторите са под 90° ъгъл)
-                bool hasPassedTarget = Vector2.Dot(moveDirection, targetDir) < 0;
+                bool hasPassedTarget = Vector2.Dot(moveDirection, targetDir) < -0.2;
 
                 if (!hasPassedTarget)
                     break;

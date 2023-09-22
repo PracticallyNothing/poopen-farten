@@ -37,13 +37,14 @@ public class WolfScript : EnemyScript
     // The direction towards which the Wolf is walking/running.
     Vector2 moveDirection;
 
-	public void Lunge() {
-		// TODO(Mario):
-		//   В момента вълка перфектно те прескача, а идеята е да минава на
-		//   височина лицето ти, освен ако не клекнеш.
-		myBody.AddForce(new Vector3((moveDirection * 40).x, 30, 0), ForceMode2D.Impulse);
-		currState = WolfState.Lunging;
-	}
+    public void Lunge()
+    {
+        // TODO(Mario):
+        //   В момента вълка перфектно те прескача, а идеята е да минава на
+        //   височина лицето ти, освен ако не клекнеш.
+        myBody.AddForce(new Vector3((moveDirection * 40).x, 30, 0), ForceMode2D.Impulse);
+        currState = WolfState.Lunging;
+    }
 
     // Change where the Wolf is moving to.
     void UpdateMoveDirection() {
@@ -77,7 +78,7 @@ public class WolfScript : EnemyScript
             animator.SetBool("Moving", true);
             animator.SetBool("Running", true);
             UpdateMoveDirection();
-			currState = WolfState.Moving;
+            currState = WolfState.Moving;
             myBody.drag = 0.8f;
         }
         else if (agitated && currState == WolfState.Moving)
@@ -119,14 +120,14 @@ public class WolfScript : EnemyScript
                 Vector2 targetDir = (moveTarget - pos).normalized;
 
                 float moveForce = agitated ? runSpeed : walkSpeed;
-				/// Calculate the "final force" that will be applied, which is the moveForce, limited by the maximum velocity.
+                /// Calculate the "final force" that will be applied, which is the moveForce, limited by the maximum velocity.
                 float finalForce = Math.Min(
-					// NOTE(Mario):
-					//   (maxVelocity - currentVelocity) може да стане отрицателно и много бързо става много смешно - вълкът
-					//   хвръква на хиляди единици в грешната посока. Затова, ако е под 0, просто го заместваме с нула.
-					Math.Max(0, maxVelocity - myBody.velocity.magnitude),
-					moveForce
-				);
+                    // NOTE(Mario):
+                    //   (maxVelocity - currentVelocity) може да стане отрицателно и много бързо става много смешно - вълкът
+                    //   хвръква на хиляди единици в грешната посока. Затова, ако е под 0, просто го заместваме с нула.
+                    Math.Max(0, maxVelocity - myBody.velocity.magnitude),
+                    moveForce
+                );
                 myBody.AddForce(moveDirection * finalForce, ForceMode2D.Impulse);
 
                 if (!agitated) {
@@ -134,38 +135,38 @@ public class WolfScript : EnemyScript
                     animator.SetBool("Moving", false);
                 }
 
-				float distToPlayer = (
-					player.transform.position - transform.position
-				).magnitude;
-				Debug.Log(string.Format("distToPlayer: {0}", distToPlayer));
+                float distToPlayer = (player.transform.position - transform.position).magnitude;
 
-				if(distToPlayer <= maxDistanceBeforeLunge) {
-					animator.SetBool("Lunging", true);
-					myBody.velocity = Vector3.zero;
-					currState = WolfState.PreparingLunge;
-					break;
-				}
+                if (distToPlayer <= maxDistanceBeforeLunge)
+                {
+                    animator.SetBool("Lunging", true);
+                    myBody.velocity = Vector3.zero;
+                    currState = WolfState.PreparingLunge;
+                    break;
+                }
 
-				UpdateMoveDirection();
-				moveStart = transform.position;
-				TurnTowardsPoint(player.transform.position);
+                UpdateMoveDirection();
+                moveStart = transform.position;
+                TurnTowardsPoint(player.transform.position);
                 break;
-		    case WolfState.PreparingLunge:
-				break;
-		    case WolfState.Lunging:
-				if(Vector2.Dot(myBody.velocity.normalized, new Vector2(0, -1)) >= 0.3) {
-					animator.SetBool("Lunging", false);
-					currState = WolfState.Landing;
-				}
-				break;
-			case WolfState.Landing:
-				if(myBody.velocity.y < 0.3) {
-					moveStart = transform.position;
-					TurnTowardsPoint(player.transform.position);
-					UpdateMoveDirection();
-					currState = WolfState.Moving;
-				}
-				break;
+            case WolfState.PreparingLunge:
+                break;
+            case WolfState.Lunging:
+                if (Vector2.Dot(myBody.velocity.normalized, new Vector2(0, -1)) >= 0.3)
+                {
+                    animator.SetBool("Lunging", false);
+                    currState = WolfState.Landing;
+                }
+                break;
+            case WolfState.Landing:
+                if (myBody.velocity.y < 0.3)
+                {
+                    moveStart = transform.position;
+                    TurnTowardsPoint(player.transform.position);
+                    UpdateMoveDirection();
+                    currState = WolfState.Moving;
+                }
+                break;
         }
     }
 }

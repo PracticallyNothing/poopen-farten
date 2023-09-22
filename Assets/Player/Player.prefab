@@ -133,17 +133,17 @@ MonoBehaviour:
   m_GameObject: {fileID: 7709331526693820742}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: de1e6aafeeb1422429616888b4a1edd0, type: 3}
+  m_Script: {fileID: 11500000, guid: 4cd99a30f506e2617beede467210b9f2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  recipes:
-  - ingredients: 0100000002000000
-    result: {fileID: 1219608878419350482, guid: b41160b212a8a9afab3c903b323f9e3c, type: 3}
-  - ingredients: 0100000003000000
-    result: {fileID: 1219608878419350482, guid: b41160b212a8a9afab3c903b323f9e3c, type: 3}
-  - ingredients: 0200000003000000
-    result: {fileID: 1219608878419350482, guid: b41160b212a8a9afab3c903b323f9e3c, type: 3}
-  selectedElements: 
+  allThrowables:
+  - {fileID: 1747932285116205653, guid: 76db06d5aae4a9bacac2bd4231d69ca7, type: 3}
+  - {fileID: 1747932285116205653, guid: d864f0b12d85d5551baa9d9311578ab4, type: 3}
+  - {fileID: 1747932285116205653, guid: e6605f08dd555cae997373cbe1b9d319, type: 3}
+  hotbar:
+  - {fileID: 1747932285116205653, guid: 76db06d5aae4a9bacac2bd4231d69ca7, type: 3}
+  - {fileID: 1747932285116205653, guid: d864f0b12d85d5551baa9d9311578ab4, type: 3}
+  - {fileID: 1747932285116205653, guid: e6605f08dd555cae997373cbe1b9d319, type: 3}
 --- !u!61 &4487557115368563922
 BoxCollider2D:
   m_ObjectHideFlags: 0

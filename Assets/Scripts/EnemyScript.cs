@@ -1,5 +1,4 @@
 using System;
-using Unity.VisualScripting;
 using UnityEngine;
 
 [RequireComponent(typeof(Animator), typeof(Rigidbody2D))]
@@ -12,21 +11,27 @@ public class EnemyScript : MonoBehaviour
     protected Animator animator = null;
     protected static GameObject player = null;
 
-	[SerializeField] protected float maxVelocity = 15;
+    [SerializeField] protected float maxVelocity = 15;
 
     [SerializeField] protected float viewRange = 40;
     [SerializeField] protected float walkSpeed = 0.35f;
     [SerializeField] protected float runSpeed = 1f;
 
-    protected void OnTriggerEnter2D(Collider2D other) {
-        if(other.CompareTag("Potion")) {
-            other.gameObject.GetComponent<Potion>().OnHit(gameObject);
+    protected void OnTriggerEnter2D(Collider2D other)
+    {
+        if (other.CompareTag("Potion"))
+        {
+            // other.gameObject.GetComponent<Potion>().OnHit(gameObject);
         }
     }
 
     // Check whether the enemy can see the player.
     protected bool SeesPlayer()
     {
+        if(player == null) {
+            player = GameObject.Find("Player");
+        }
+
         Vector2 dirToPlayer = player.transform.position - transform.position;
 
         // If the player is way too far away, we definitely don't see them.
