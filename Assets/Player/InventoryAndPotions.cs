@@ -1,6 +1,6 @@
 using UnityEngine;
 
-[RequireComponent(typeof(Rigidbody2D))]
+[RequireComponent(typeof(Rigidbody2D), typeof(AudioSource))]
 public class InventoryAndPotions : MonoBehaviour
 {
     [SerializeField] GameObject[] allThrowables;
@@ -10,10 +10,12 @@ public class InventoryAndPotions : MonoBehaviour
     bool isAiming = false;
 
     private Rigidbody2D playerRigidBody2D;
+    private AudioSource audioSource;
 
     void Start()
     {
         playerRigidBody2D = GetComponent<Rigidbody2D>();
+        audioSource = GetComponent<AudioSource>();
     }
 
     /// Select a throwable from the hotbar based on its index and Instantiate()
@@ -37,9 +39,13 @@ public class InventoryAndPotions : MonoBehaviour
 
         // Disable physics and collision on the throwable.
         heldThrowable.GetComponent<Rigidbody2D>().simulated = false;
+
+        var soundOnPick = heldThrowable.GetComponent<Throwable>().soundOnPick;
+        if(soundOnPick != null)
+            audioSource.PlayOneShot(soundOnPick);
     }
 
-    void FixedUpdate()
+    void Update()
     {
         // Pick the 1-st, 2-nd and 3-rd throwable on the hotbar using Q, W and E.
         KeyCode[] bindings = {
@@ -86,15 +92,22 @@ public class InventoryAndPotions : MonoBehaviour
         else if (isAiming && Input.GetMouseButtonUp(0))
         {
             Debug.Log("Throwing!!!");
-            var rigidBody = heldThrowable.GetComponent<Rigidbody2D>();
-            rigidBody.simulated = true;
 
+            // Put the throwable in such a place so its outside the player's hitbox.
             heldThrowable.transform.position = transform.position + dir.normalized * 5;
             heldThrowable.transform.SetParent(null, true);
 
+            // Add the player's velocity to the throwable's, add more force and some torque.
+            var rigidBody = heldThrowable.GetComponent<Rigidbody2D>();
+            rigidBody.simulated = true;
             rigidBody.velocity = playerRigidBody2D.velocity / 1.2f;
             rigidBody.AddForce(dir * 25, ForceMode2D.Impulse);
-            rigidBody.AddTorque(25);
+            rigidBody.AddTorque(65);
+
+            // Play the sound when the throwable is thrown.
+            var soundOnThrow = heldThrowable.GetComponent<Throwable>().soundOnThrow;
+            if(soundOnThrow != null)
+                audioSource.PlayOneShot(soundOnThrow);
 
             heldThrowable = null;
             isAiming = false;

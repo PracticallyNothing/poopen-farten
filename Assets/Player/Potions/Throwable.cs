@@ -22,11 +22,11 @@ public enum Stim {
 [ExecuteInEditMode]
 [RequireComponent(typeof(CircleCollider2D), typeof(Rigidbody2D), typeof(SpriteRenderer))]
 public class Throwable : MonoBehaviour {
-    /// The icon shown in the UI for this element.
-    [SerializeField] Sprite icon;
+    /// What element this throwable actually represents.
+    [SerializeField] Element element;
 
-    /// The sprite used to visualize this throwable in the world.
-    [SerializeField] Sprite thrownSprite;
+    /// What effects the throwable causes on hit.
+    [SerializeField] Stim stim;
 
     // NOTE(Mario):
     //   Явно вече има променлива "name" в клас Object.
@@ -38,14 +38,20 @@ public class Throwable : MonoBehaviour {
     [Multiline(5)]
     [SerializeField] string description;
 
-    /// What element this throwable actually represents.
-    [SerializeField] Element element;
-
-    /// What effects the throwable causes on hit.
-    [SerializeField] Stim stim;
-
     /// Does the throwable create a field of the stim after hitting?
     [SerializeField] bool spawnFieldOnHit = false;
+
+    /// The icon shown in the UI for this element.
+    [Header("Visuals")]
+    [SerializeField] Sprite icon;
+
+    /// The sprite used to visualize this throwable in the world.
+    [SerializeField] Sprite thrownSprite;
+
+    [Header("Sounds")]
+    [SerializeField] public AudioClip soundOnPick;
+    [SerializeField] public AudioClip soundOnThrow;
+    [SerializeField] public AudioClip soundOnHit;
 
     private new Rigidbody2D rigidbody2D;
     private SpriteRenderer spriteRenderer;
@@ -62,8 +68,10 @@ public class Throwable : MonoBehaviour {
             spriteRenderer = GetComponent<SpriteRenderer>();
 
         transform.localScale = new Vector3(0.5f, 0.5f, 1);
-        rigidbody2D.gravityScale = 4.9f;
         spriteRenderer.sprite = thrownSprite;
+
+        rigidbody2D.gravityScale = 4.9f;
+        rigidbody2D.angularDrag = 0.5f;
     }
 
     void OnTriggerEnter2D(Collider2D other) {
@@ -79,6 +87,14 @@ public class Throwable : MonoBehaviour {
             if(stimResponder != null)
                 stimResponder.ReactToStim(element, stim);
         }
+
+
+        // Play the on hit sound when we impact something.
+        // TODO(Mario):
+        //   Искаме ли да добавяме вариация към звука - да му променяме тона, например?
+        //   Ще е полезно ако могат да бъдат метнати няколко Throwable-и едновременно.
+        if(soundOnHit != null)
+            AudioSource.PlayClipAtPoint(soundOnHit, transform.position);
 
         Destroy(gameObject);
     }
