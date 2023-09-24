@@ -96,7 +96,18 @@ public class Throwable : MonoBehaviour {
         if(soundOnHit != null)
             AudioSource.PlayClipAtPoint(soundOnHit, transform.position);
 
-        Destroy(gameObject);
+        // NOTE(Mario):
+        //   Не става със Destroy() ако искаме отварите да имат particle effect-и, защото когато унищожиш
+        //   обекта, те веднага изчезват. Вместо това просто му изключваме физиките и спираме да го показваме.
+        // Destroy(gameObject);
+
+        rigidbody2D.simulated = false;
+        GetComponent<SpriteRenderer>().enabled = false;
+
+        var particleSystem = GetComponent<ParticleSystem>();
+        if(particleSystem != null) {
+            particleSystem.Stop();
+        }
     }
 }
 

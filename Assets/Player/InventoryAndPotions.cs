@@ -45,6 +45,9 @@ public class InventoryAndPotions : MonoBehaviour
             audioSource.PlayOneShot(soundOnPick);
     }
 
+    // NOTE(Mario):
+    //   Това НЕ ТРЯБВА ДА Е FixedUpdate()!
+    //   Вътре има логика за засичане на мишката и клавиатурата, която трябва да се изпълнява всеки кадър!
     void Update()
     {
         // Pick the 1-st, 2-nd and 3-rd throwable on the hotbar using Q, W and E.
@@ -75,15 +78,11 @@ public class InventoryAndPotions : MonoBehaviour
 
         // Upon pressing LMB, activate aiming mode.
         if (Input.GetMouseButtonDown(0))
-        {
-            Debug.Log("Aiming...");
             isAiming = true;
-        }
 
         // If we're aiming and the user presses RMB, cancel the throw.
         else if (isAiming && Input.GetMouseButtonDown(1))
         {
-            Debug.Log("Not aiming.");
             heldThrowable.transform.localPosition = new Vector3(-1, 0, 0); // Reset the potion's location.
             isAiming = false;
         }
@@ -91,8 +90,6 @@ public class InventoryAndPotions : MonoBehaviour
         // If we're aiming and the user lets go of LMB, do the actual throw.
         else if (isAiming && Input.GetMouseButtonUp(0))
         {
-            Debug.Log("Throwing!!!");
-
             // Put the throwable in such a place so its outside the player's hitbox.
             heldThrowable.transform.position = transform.position + dir.normalized * 5;
             heldThrowable.transform.SetParent(null, true);

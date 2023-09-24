@@ -1,8 +1,9 @@
 using System;
+using System.Collections.Generic;
 using UnityEngine;
 
 [RequireComponent(typeof(Animator), typeof(Rigidbody2D))]
-public class EnemyScript : MonoBehaviour
+public class EnemyScript : MonoBehaviour, StimResponder
 {
     [SerializeField]
     public int health = 5;
@@ -73,5 +74,10 @@ public class EnemyScript : MonoBehaviour
         myBody = GetComponent<Rigidbody2D>();
         animator = GetComponent<Animator>();
         player = GameObject.Find("Player");
+    }
+
+    void StimResponder.ReactToStim(Element element, Stim stim)
+    {
+        throw new NotImplementedException();
     }
 }
