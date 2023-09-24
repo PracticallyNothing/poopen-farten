@@ -18,7 +18,7 @@ GameObject:
   - component: {fileID: 2184189709340604752}
   m_Layer: 0
   m_Name: Salt Bag
-  m_TagString: Untagged
+  m_TagString: Potion
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0

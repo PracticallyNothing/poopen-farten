@@ -13,6 +13,7 @@ public class BoarScript : EnemyScript
 
     // Whether the boar is angry. Determined by whether it's seen the player.
     bool agitated = false;
+    bool blinded = false;
 
     // Location the farmer will try to move to in his moving state.
     // When the point is reached, the farmer stops.
@@ -24,6 +25,13 @@ public class BoarScript : EnemyScript
 
     // The direction towards which the boar is walking/running.
     Vector2 moveDirection;
+
+    public override void ReactToStim(Element element, Stim stim) {
+        if(element != Element.Salt || stim != Stim.Blindness)
+            return;
+
+        blinded = true;
+    }
 
     // Change where the boar is moving to.
     void UpdateMoveDirection() {
@@ -49,7 +57,6 @@ public class BoarScript : EnemyScript
         //   Това ОК ли е?
         if (!agitated && SeesPlayer())
         {
-            Debug.Log("BRRR IM ANGY 😠");
             agitated = true;
             animator.SetBool("Moving", true);
             animator.SetBool("Running", true);
@@ -116,19 +123,24 @@ public class BoarScript : EnemyScript
                 //     Vector2.Dot(←, ↑) = 0
                 //       или
                 //     Vector2.Dot(←, ↓) = 0 (т.е векторите са под 90° ъгъл)
-                bool hasPassedTarget = Vector2.Dot(moveDirection, targetDir) < -0.2;
+                bool hasPassedTarget = Vector2.Dot(moveDirection, targetDir) < 0;
 
                 if (!hasPassedTarget)
                     break;
 
+
                 if (!agitated) {
                     currState = BoarState.Idle;
                     animator.SetBool("Moving", false);
-                } else if(myBody.velocity.magnitude >= 8) {
+                } else if(!blinded && myBody.velocity.magnitude >= 8) {
                     currState = BoarState.SlowingDown;
                     animator.SetBool("Moving", true);
                     animator.SetBool("Slowing Down", true);
                     myBody.drag = 0.05f;
+                } else if(blinded && myBody.velocity.magnitude <= 1) {
+                    health -= 1;
+                    currState = BoarState.SlowingDown;
+                    blinded = false;
                 }
 
                 break;

@@ -76,8 +76,7 @@ public class EnemyScript : MonoBehaviour, StimResponder
         player = GameObject.Find("Player");
     }
 
-    void StimResponder.ReactToStim(Element element, Stim stim)
-    {
+    public virtual void ReactToStim(Element element, Stim stim) {
         throw new NotImplementedException();
     }
 }

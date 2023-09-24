@@ -74,6 +74,11 @@ public class Throwable : MonoBehaviour {
         rigidbody2D.angularDrag = 0.5f;
     }
 
+    void Start() {
+        spriteRenderer = GetComponent<SpriteRenderer>();
+        rigidbody2D = GetComponent<Rigidbody2D>();
+    }
+
     void OnTriggerEnter2D(Collider2D other) {
         if (spawnFieldOnHit && false)
         {
@@ -96,17 +101,13 @@ public class Throwable : MonoBehaviour {
         if(soundOnHit != null)
             AudioSource.PlayClipAtPoint(soundOnHit, transform.position);
 
-        // NOTE(Mario):
-        //   Не става със Destroy() ако искаме отварите да имат particle effect-и, защото когато унищожиш
-        //   обекта, те веднага изчезват. Вместо това просто му изключваме физиките и спираме да го показваме.
-        // Destroy(gameObject);
-
-        rigidbody2D.simulated = false;
-        GetComponent<SpriteRenderer>().enabled = false;
-
         var particleSystem = GetComponent<ParticleSystem>();
         if(particleSystem != null) {
+            rigidbody2D.simulated = false;
+            GetComponent<SpriteRenderer>().enabled = false;
             particleSystem.Stop();
+        } else {
+            Destroy(gameObject);
         }
     }
 }
