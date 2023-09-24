@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 
 [RequireComponent(typeof(Rigidbody2D), typeof(AudioSource))]
@@ -12,6 +13,9 @@ public class InventoryAndPotions : MonoBehaviour
     private Rigidbody2D playerRigidBody2D;
     private AudioSource audioSource;
 
+    DateTime? lastPotionPick = null;
+    [SerializeField] TimeSpan potionPickDelay = new TimeSpan(0, 0, 0, 0, 750);
+
     void Start()
     {
         playerRigidBody2D = GetComponent<Rigidbody2D>();
@@ -24,6 +28,10 @@ public class InventoryAndPotions : MonoBehaviour
         // If we're trying to pick an index that doesn't exist in the hotbar,
         // give up.
         if (hotbarIndex >= hotbar.Length)
+            return;
+
+        // Rate-limit the number of potions the player can pick.
+        if (lastPotionPick != null && (DateTime.Now - lastPotionPick) < potionPickDelay)
             return;
 
         // If we're already holding something, don't pick a throwable.
@@ -43,6 +51,8 @@ public class InventoryAndPotions : MonoBehaviour
         var soundOnPick = heldThrowable.GetComponent<Throwable>().soundOnPick;
         if(soundOnPick != null)
             audioSource.PlayOneShot(soundOnPick);
+
+        lastPotionPick = DateTime.Now;
     }
 
     // NOTE(Mario):

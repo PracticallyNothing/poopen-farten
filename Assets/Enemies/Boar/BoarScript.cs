@@ -128,7 +128,6 @@ public class BoarScript : EnemyScript
                 if (!hasPassedTarget)
                     break;
 
-
                 if (!agitated) {
                     currState = BoarState.Idle;
                     animator.SetBool("Moving", false);
