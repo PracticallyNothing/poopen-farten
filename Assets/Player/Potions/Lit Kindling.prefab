@@ -53,6 +53,7 @@ MonoBehaviour:
   name: Lit Kindling
   description: A bunch of kindling quickly ignited and thrown.
   spawnFieldOnHit: 0
+  areaOfEffect: {fileID: 0}
   icon: {fileID: 21300000, guid: 7302ad82049d5d839a5611ed466852fa, type: 3}
   thrownSprite: {fileID: 21300000, guid: 7302ad82049d5d839a5611ed466852fa, type: 3}
   soundOnPick: {fileID: 0}

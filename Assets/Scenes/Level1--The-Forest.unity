@@ -8495,9 +8495,25 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 3172003609111799252, guid: e525ba23b5909e478ae9bca969e010f3, type: 3}
+      propertyPath: m_Mass
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 3172003609111799252, guid: e525ba23b5909e478ae9bca969e010f3, type: 3}
+      propertyPath: m_GravityScale
+      value: 9.8
+      objectReference: {fileID: 0}
     - target: {fileID: 4588382763216266123, guid: e525ba23b5909e478ae9bca969e010f3, type: 3}
       propertyPath: health
       value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 4588382763216266123, guid: e525ba23b5909e478ae9bca969e010f3, type: 3}
+      propertyPath: runSpeed
+      value: 0.8
+      objectReference: {fileID: 0}
+    - target: {fileID: 4588382763216266123, guid: e525ba23b5909e478ae9bca969e010f3, type: 3}
+      propertyPath: walkSpeed
+      value: 0.45
       objectReference: {fileID: 0}
     - target: {fileID: 4588382763216266123, guid: e525ba23b5909e478ae9bca969e010f3, type: 3}
       propertyPath: maxVelocity

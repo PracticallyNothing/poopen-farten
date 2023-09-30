@@ -55,6 +55,7 @@ MonoBehaviour:
     \n\nCombines with salt to generate a noxious smoke cloud, obscuring everyone
     inside."
   spawnFieldOnHit: 1
+  areaOfEffect: {fileID: 0}
   icon: {fileID: 21300000, guid: 6c17a3b004859f0c4acaeef7288a5888, type: 3}
   thrownSprite: {fileID: 21300000, guid: 6c17a3b004859f0c4acaeef7288a5888, type: 3}
   soundOnPick: {fileID: 8300000, guid: 9f86e0345bbfbcbf29d338c8c646cf6f, type: 3}

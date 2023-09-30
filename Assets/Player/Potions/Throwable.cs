@@ -38,8 +38,10 @@ public class Throwable : MonoBehaviour {
     [Multiline(5)]
     [SerializeField] string description;
 
+    [Header("Area of Effect")]
     /// Does the throwable create a field of the stim after hitting?
     [SerializeField] bool spawnFieldOnHit = false;
+    [SerializeField] GameObject areaOfEffect = null;
 
     /// The icon shown in the UI for this element.
     [Header("Visuals")]
@@ -80,11 +82,9 @@ public class Throwable : MonoBehaviour {
     }
 
     void OnTriggerEnter2D(Collider2D other) {
-        if (spawnFieldOnHit && false)
+        if (spawnFieldOnHit && areaOfEffect != null)
         {
-            // TODO(Mario):
-            //   Трябва всъщност да направя полето да работи.
-            Instantiate(null, transform.position, Quaternion.identity, null);
+            Instantiate(areaOfEffect, transform.position, Quaternion.identity, null);
         }
         else
         {
@@ -92,7 +92,6 @@ public class Throwable : MonoBehaviour {
             if(stimResponder != null)
                 stimResponder.ReactToStim(element, stim);
         }
-
 
         // Play the on hit sound when we impact something.
         // TODO(Mario):
@@ -106,6 +105,7 @@ public class Throwable : MonoBehaviour {
             rigidbody2D.simulated = false;
             GetComponent<SpriteRenderer>().enabled = false;
             particleSystem.Stop();
+            Destroy(gameObject, particleSystem.main.startLifetime.constant);
         } else {
             Destroy(gameObject);
         }

@@ -30,6 +30,12 @@ public class BoarScript : EnemyScript
         if(element != Element.Salt || stim != Stim.Blindness)
             return;
 
+        // TODO(Mario):
+        //   Така ли е по-добре (да не реагира на солта, когато се забавя)
+        //   или ще е по-добре да се въздържа от бягане ако вече е бил заслепен?
+        if(currState == BoarState.SlowingDown)
+            return;
+
         blinded = true;
     }
 
@@ -136,7 +142,7 @@ public class BoarScript : EnemyScript
                     animator.SetBool("Moving", true);
                     animator.SetBool("Slowing Down", true);
                     myBody.drag = 0.05f;
-                } else if(blinded && myBody.velocity.magnitude <= 1) {
+                } else if(blinded && myBody.velocity.magnitude <= runSpeed) {
                     health -= 1;
                     currState = BoarState.SlowingDown;
                     blinded = false;

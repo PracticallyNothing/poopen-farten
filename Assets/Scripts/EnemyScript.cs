@@ -69,7 +69,7 @@ public class EnemyScript : MonoBehaviour, StimResponder
         transform.localScale = scale;
     }
 
-    void Start()
+    virtual protected void Start()
     {
         myBody = GetComponent<Rigidbody2D>();
         animator = GetComponent<Animator>();

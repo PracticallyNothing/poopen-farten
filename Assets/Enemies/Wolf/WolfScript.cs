@@ -73,7 +73,6 @@ public class WolfScript : EnemyScript
         //   Това ОК ли е?
         if (!agitated && SeesPlayer())
         {
-            Debug.Log("BRRR IM ANGY 😠");
             agitated = true;
             animator.SetBool("Moving", true);
             animator.SetBool("Running", true);

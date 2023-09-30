@@ -13,6 +13,8 @@ public class InventoryAndPotions : MonoBehaviour
     private Rigidbody2D playerRigidBody2D;
     private AudioSource audioSource;
 
+    /// Last time the player picked a potion.
+    /// Used to limit the time between picking potions.
     DateTime? lastPotionPick = null;
     [SerializeField] TimeSpan potionPickDelay = new TimeSpan(0, 0, 0, 0, 750);
 
