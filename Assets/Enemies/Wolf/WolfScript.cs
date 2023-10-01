@@ -1,5 +1,6 @@
 using System;
 using UnityEngine;
+using System.Linq;
 
 enum WolfState
 {
@@ -37,16 +38,22 @@ public class WolfScript : EnemyScript
     // The direction towards which the Wolf is walking/running.
     Vector2 moveDirection;
 
-    public void Lunge()
-    {
-        // TODO(Mario):
-        //   В момента вълка перфектно те прескача, а идеята е да минава на
-        //   височина лицето ти, освен ако не клекнеш.
-        myBody.AddForce(new Vector3((moveDirection * 40).x, 30, 0), ForceMode2D.Impulse);
-        currState = WolfState.Lunging;
+    private BoxCollider2D boxCollider2D = null;
+
+    protected override void Start() {
+        boxCollider2D = GetComponent<BoxCollider2D>();
+
+        base.Start();
     }
 
-    // Change where the Wolf is moving to.
+    public void Lunge()
+    {
+        myBody.AddForce(new Vector3((moveDirection * 40).x, 20, 0), ForceMode2D.Impulse);
+        currState = WolfState.Lunging;
+        boxCollider2D.isTrigger = true;
+    }
+
+    /// Change where the Wolf is moving to.
     void UpdateMoveDirection() {
         if(agitated) {
             moveDirection = new Vector2((player.transform.position - transform.position).x, 0).normalized;
@@ -61,9 +68,13 @@ public class WolfScript : EnemyScript
     /// How close the wolf needs to get to the player before jumping at him.
     [SerializeField] float maxDistanceBeforeLunge = 10;
 
-    // Run the logic of the Wolf.
+    // NOTE(Mario):
+    //   Логиката за приземяване след скок зависи от разстоянието до земята, измерено на всеки FixedUpdate().
+    //   Ако FixedUpdate() не се случва достатъчно често, вълкът има шанс да падне през пода!
     void FixedUpdate()
     {
+        // Debug.Log($"State: {currState}, Velocity: {myBody.velocity}");
+
         // If the Wolf is dead, stop running logic for it.
         if (currState == WolfState.Dead)
             return;
@@ -139,7 +150,7 @@ public class WolfScript : EnemyScript
                 if (distToPlayer <= maxDistanceBeforeLunge)
                 {
                     animator.SetBool("Lunging", true);
-                    myBody.velocity = Vector3.zero;
+                    //myBody.velocity = Vector3.zero;
                     currState = WolfState.PreparingLunge;
                     break;
                 }
@@ -151,15 +162,23 @@ public class WolfScript : EnemyScript
             case WolfState.PreparingLunge:
                 break;
             case WolfState.Lunging:
-                if (Vector2.Dot(myBody.velocity.normalized, new Vector2(0, -1)) >= 0.3)
-                {
+                RaycastHit2D groundRay = Physics2D
+                    .RaycastAll(transform.position, myBody.velocity.normalized)
+                    .Where((hit) => hit.collider.CompareTag("Floor"))
+                    .FirstOrDefault();
+
+                Debug.DrawLine(transform.position, groundRay.normal * groundRay.distance);
+
+                if(groundRay.distance - boxCollider2D.size.y/2 + boxCollider2D.offset.y <= 0.2) {
+                    Debug.Log("Not Lunging anymore.");
                     animator.SetBool("Lunging", false);
                     currState = WolfState.Landing;
                 }
                 break;
             case WolfState.Landing:
-                if (myBody.velocity.y < 0.3)
+                if (myBody.velocity.y < 0.2)
                 {
+                    boxCollider2D.isTrigger = false;
                     moveStart = transform.position;
                     TurnTowardsPoint(player.transform.position);
                     UpdateMoveDirection();
