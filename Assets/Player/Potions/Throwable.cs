@@ -105,6 +105,10 @@ public class Throwable : MonoBehaviour {
             rigidbody2D.simulated = false;
             GetComponent<SpriteRenderer>().enabled = false;
             particleSystem.Stop();
+
+            // TODO(Mario):
+            //   Ако променим particleSystem-а да не ползва константно време за частиците, а
+            //   да е променливо, този код ще се наебе (надявам се да гръмне с грешка, за да ни уведоми, но нямам представа.)
             Destroy(gameObject, particleSystem.main.startLifetime.constant);
         } else {
             Destroy(gameObject);
