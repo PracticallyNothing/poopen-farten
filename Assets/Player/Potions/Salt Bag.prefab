@@ -67,7 +67,7 @@ MonoBehaviour:
   thrownSprite: {fileID: 21300000, guid: 66486e67765a4371880d4fe47b6cdd5c, type: 3}
   soundOnPick: {fileID: 8300000, guid: 0bf02e05a96722518a699b0d5cce851c, type: 3}
   soundOnThrow: {fileID: 8300000, guid: 1d4e7818dd4c717818a030b90a3eb3d9, type: 3}
-  soundOnHit: {fileID: 0}
+  soundOnHit: {fileID: 8300000, guid: 860743978e63215ad9480f5e821f5672, type: 3}
 --- !u!58 &7993043189457692475
 CircleCollider2D:
   m_ObjectHideFlags: 0
