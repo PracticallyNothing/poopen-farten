@@ -1,4 +1,5 @@
 using System;
+using Unity.VisualScripting;
 using UnityEngine;
 
 enum BoarState
@@ -10,6 +11,7 @@ public class BoarScript : EnemyScript
 {
     [SerializeField]
     BoarState currState = BoarState.Idle;
+    int damage = 2;
 
     // Whether the boar is angry. Determined by whether it's seen the player.
     bool agitated = false;
@@ -160,6 +162,15 @@ public class BoarScript : EnemyScript
                     TurnTowardsPoint(player.transform.position);
                 }
                 break;
+        }
+    }
+
+    //  proverqva dali e blusnal igracha, ako da mu nanasq shteti
+    private void OnCollisionEnter2D(Collision2D collision)
+    {
+        if (collision.gameObject.CompareTag("Player") && currState == BoarState.Moving)
+        {
+            collision.gameObject.GetComponent<PlayerHealth>().TakeDamage(damage);
         }
     }
 }

@@ -82,6 +82,7 @@ GameObject:
   - component: {fileID: 7709331526693820743}
   - component: {fileID: 7709331526693820740}
   - component: {fileID: 3346984182151892346}
+  - component: {fileID: 2506504769704972716}
   - component: {fileID: 4487557115368563922}
   - component: {fileID: 4258179455621168019}
   - component: {fileID: 6980497755337694145}
@@ -146,6 +147,20 @@ MonoBehaviour:
   - {fileID: 1747932285116205653, guid: d864f0b12d85d5551baa9d9311578ab4, type: 3}
   - {fileID: 1747932285116205653, guid: e6605f08dd555cae997373cbe1b9d319, type: 3}
   heldThrowable: {fileID: 0}
+--- !u!114 &2506504769704972716
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7709331526693820742}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7a2d80fefb60a824a94e8abe2991f681, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  playerMaxHealth: 5
+  respawnPoint: {fileID: 0}
 --- !u!61 &4487557115368563922
 BoxCollider2D:
   m_ObjectHideFlags: 0
