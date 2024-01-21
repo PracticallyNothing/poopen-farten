@@ -15,5 +15,6 @@ public class GroundColliderScript : MonoBehaviour
             return;
 
         movement.canJump = true;
+        movement.myRigidbody.mass = 1.0f;
     }
 }

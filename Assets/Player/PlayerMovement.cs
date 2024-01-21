@@ -7,7 +7,7 @@ public class PlayerMovement : MonoBehaviour
     // Whether hitting the Spacebar does anything.
     public bool canJump = true;
 
-    Rigidbody2D myRigidbody = null;
+    public Rigidbody2D myRigidbody = null;
 
     /// How high the character jumps.
     [SerializeField] float jumpForce = 40;
@@ -34,12 +34,13 @@ public class PlayerMovement : MonoBehaviour
 
         if (Input.GetKey(KeyCode.Space) && canJump && !crouching) {
             myRigidbody.AddForce(new Vector3(0, jumpForce, 0), ForceMode2D.Impulse);
+            myRigidbody.mass = 0.3f;
             canJump = false;
         }
 
 
         Vector2 scale = transform.localScale;
-        scale.y = crouching ? 0.6f : 1f;
+        scale.y = crouching ? 0.6f : 2f;
         transform.localScale = scale;
 
         bool justCrouched =  crouching && !prevCrouching;
