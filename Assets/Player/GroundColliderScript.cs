@@ -15,6 +15,10 @@ public class GroundColliderScript : MonoBehaviour
             return;
 
         movement.canJump = true;
-        movement.myRigidbody.mass = 1.0f;
+    }
+
+    void OnTriggerExit2D(Collider2D other) {
+        Debug.Log("Can't jump anymore!");
+        movement.canJump = false;
     }
 }

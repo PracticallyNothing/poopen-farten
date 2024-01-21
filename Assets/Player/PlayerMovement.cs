@@ -7,7 +7,9 @@ public class PlayerMovement : MonoBehaviour
     // Whether hitting the Spacebar does anything.
     public bool canJump = true;
 
-    public Rigidbody2D myRigidbody = null;
+    Rigidbody2D myRigidbody = null;
+
+    DateTime? lastJump = null;
 
     /// How high the character jumps.
     [SerializeField] float jumpForce = 40;
@@ -20,6 +22,10 @@ public class PlayerMovement : MonoBehaviour
     /// Increase if you want faster acceleration.
     [SerializeField] float maxMoveForce = 2;
 
+    /// The amount of time to wait before allowing the player to jump again.
+    /// Used for avoiding spamming.
+    [SerializeField] int millisecondsBetweenJumps = 350;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -31,13 +37,13 @@ public class PlayerMovement : MonoBehaviour
     void FixedUpdate()
     {
         bool crouching = Input.GetKey(KeyCode.S);
+        bool itsTimeToJump = lastJump == null || (DateTime.Now - lastJump).Value.TotalMilliseconds > millisecondsBetweenJumps;
 
-        if (Input.GetKey(KeyCode.Space) && canJump && !crouching) {
+        if (Input.GetKey(KeyCode.Space) && itsTimeToJump && canJump && !crouching) {
+            lastJump = DateTime.Now;
             myRigidbody.AddForce(new Vector3(0, jumpForce, 0), ForceMode2D.Impulse);
             myRigidbody.mass = 0.3f;
-            canJump = false;
         }
-
 
         Vector2 scale = transform.localScale;
         scale.y = crouching ? 0.6f : 2f;
