@@ -768,11 +768,11 @@ PlayerSettings:
   apiCompatibilityLevel: 6
   activeInputHandler: 0
   windowsGamepadBackendHint: 0
-  cloudProjectId: 
+  cloudProjectId: 29c164e7-3357-456c-8aef-58489286ba18
   framebufferDepthMemorylessMode: 0
   qualitySettingsNames: []
-  projectName: 
-  organizationId: 
+  projectName: poopen-farten
+  organizationId: yujithedragon
   cloudEnabled: 0
   legacyClampBlendShapeWeights: 0
   playerDataPath: 
