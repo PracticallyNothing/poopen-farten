@@ -42,7 +42,6 @@ public class PlayerMovement : MonoBehaviour
         if (Input.GetKey(KeyCode.Space) && itsTimeToJump && canJump && !crouching) {
             lastJump = DateTime.Now;
             myRigidbody.AddForce(new Vector3(0, jumpForce, 0), ForceMode2D.Impulse);
-            myRigidbody.mass = 0.3f;
         }
 
         Vector2 scale = transform.localScale;
