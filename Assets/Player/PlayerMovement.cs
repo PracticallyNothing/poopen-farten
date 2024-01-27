@@ -45,7 +45,7 @@ public class PlayerMovement : MonoBehaviour
         }
 
         Vector2 scale = transform.localScale;
-        scale.y = crouching ? 0.6f : 2f;
+        scale.y = crouching ? 0.6f : 1f;
         transform.localScale = scale;
 
         bool justCrouched =  crouching && !prevCrouching;
