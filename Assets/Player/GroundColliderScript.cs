@@ -9,15 +9,16 @@ public class GroundColliderScript : MonoBehaviour
         movement = GetComponentInParent<PlayerMovement>();
     }
 
-    void OnTriggerEnter2D(Collider2D other)
+    void OnCollisionEnter2D(Collision2D other)
     {
-        if(!other.CompareTag("Floor"))
+        if (!other.collider.CompareTag("Floor"))
             return;
 
         movement.canJump = true;
     }
 
-    void OnTriggerExit2D(Collider2D other) {
+    void OnCollisionExit2D(Collision2D other)
+    {
         Debug.Log("Can't jump anymore!");
         movement.canJump = false;
     }
