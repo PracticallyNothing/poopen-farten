@@ -20,10 +20,6 @@ public class PlayerMovement : MonoBehaviour
     /// Increase for faster overall running.
     [SerializeField] float horizontalVelocity = 20;
 
-    [SerializeField] float airControl = 3;
-
-    public float yVelocity { get => myRigidbody.velocity.y; }
-
     // Start is called before the first frame update
     void Start()
     {
@@ -32,43 +28,37 @@ public class PlayerMovement : MonoBehaviour
 
     private Vector2 currentVelocity = Vector2.zero;
 
-    void FixedUpdate()
+    int direction = 1;
+
+    void Update()
     {
+        if (myRigidbody.velocity.x > 0.01f)
+        {
+            transform.rotation = Quaternion.identity;
+        }
+        else if (myRigidbody.velocity.x < -0.01f)
+        {
+            transform.rotation = Quaternion.Euler(0, 180, 0);
+        }
+
         float horizontalAxis = Input.GetAxisRaw("Horizontal");
         float targetVelocity = horizontalAxis * horizontalVelocity;
 
-        myRigidbody.velocity = Vector2.SmoothDamp(
-            myRigidbody.velocity,
-            new Vector2(targetVelocity, myRigidbody.velocity.y),
-            ref currentVelocity,
-            horizontalAxis == 0 ? 0.5f : 0.05f
-        );
-
-        Vector2 pos = groundCollider.transform.position;
-        var colliders = Physics2D.OverlapBoxAll(
-            pos + groundCollider.offset,
-            groundCollider.size,
-            0
-        );
-
-        bool canJump = false;
-        foreach (var collider in colliders)
-        {
-            if (collider.CompareTag("Floor"))
-            {
-                canJump = true;
-                break;
-            }
-        }
-
+        if(Math.Abs(horizontalAxis) > 0)
+            myRigidbody.velocity = Vector2.SmoothDamp(
+                myRigidbody.velocity,
+                new Vector2(targetVelocity, myRigidbody.velocity.y),
+                ref currentVelocity,
+                horizontalAxis == 0 ? 0.5f : 0.05f
+            );
 
         var diffMs = (DateTime.Now - (lastJumpTime ?? DateTime.Now)).TotalMilliseconds;
         bool itsTimeToJump = lastJumpTime == null || diffMs > 20;
 
-        isGrounded = Math.Abs(myRigidbody.velocity.y - float.Epsilon) > 0;
+        bool notFalling = Math.Abs(myRigidbody.velocity.y) < 0.01;
 
         // Jump if the player wants to jump and we're grounded.
-        if (Input.GetButton("Jump") && isGrounded && canJump && itsTimeToJump)
+        if (Input.GetButton("Jump") && isGrounded && itsTimeToJump)
         {
             Debug.Log(
                 String.Format(
@@ -76,7 +66,8 @@ public class PlayerMovement : MonoBehaviour
                     lastJumpTime,
                     diffMs));
 
-            isGrounded = false;
+            myRigidbody.velocity = new Vector2(myRigidbody.velocity.x, 0);
+
             myRigidbody.AddForce(
                 Vector2.up * jumpForce,
                 ForceMode2D.Impulse);

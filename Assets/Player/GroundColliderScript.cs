@@ -2,23 +2,23 @@ using UnityEngine;
 
 public class GroundColliderScript : MonoBehaviour
 {
-    //     PlayerMovement movement;
+        PlayerMovement movement;
 
-    //     void Start()
-    //     {
-    //         movement = GetComponentInParent<PlayerMovement>();
-    //     }
+        void Start()
+        {
+            movement = GetComponentInParent<PlayerMovement>();
+        }
 
-    //     void OnTriggerEnter2D(Collider2D other)
-    //     {
-    //         if (!other.CompareTag("Floor"))
-    //             return;
+        void OnTriggerStay2D(Collider2D other)
+        {
+            if (!other.CompareTag("Floor"))
+                return;
 
-    //         movement.isGrounded = true;
-    //     }
+            movement.isGrounded = true;
+        }
 
-    //     void OnTriggerExit2D(Collider2D other)
-    //     {
-    //         movement.isGrounded = false;
-    //     }
+        void OnTriggerExit2D(Collider2D other)
+        {
+            movement.isGrounded = false;
+        }
 }
