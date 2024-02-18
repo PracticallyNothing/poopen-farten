@@ -1,16 +1,19 @@
 using UnityEngine;
 
-public enum Element {
+public enum Element
+{
     Salt,
     Acid,
     Kindling
 }
 
-public interface StimResponder {
+public interface StimResponder
+{
     void ReactToStim(Element element, Stim stim);
 }
 
-public enum Stim {
+public enum Stim
+{
     Blindness, /// The afflicted can't see (or e.g. protect their eyes if they should be immune)
     Burning,   /// The afflicted starts burning
     Obscured   /// The afflicted can't be seen by others - for better or for worse.
@@ -21,7 +24,8 @@ public enum Stim {
 /// either on hit or on entering a zone with the effect.
 [ExecuteInEditMode]
 [RequireComponent(typeof(CircleCollider2D), typeof(Rigidbody2D), typeof(SpriteRenderer))]
-public class Throwable : MonoBehaviour {
+public class Throwable : MonoBehaviour
+{
     /// What element this throwable actually represents.
     [SerializeField] Element element;
 
@@ -58,15 +62,17 @@ public class Throwable : MonoBehaviour {
     private new Rigidbody2D rigidbody2D;
     private SpriteRenderer spriteRenderer;
 
-    void OnEnable() {
+    void OnEnable()
+    {
         spriteRenderer = GetComponent<SpriteRenderer>();
         rigidbody2D = GetComponent<Rigidbody2D>();
     }
 
-    void OnValidate() {
-        if(rigidbody2D == null)
+    void OnValidate()
+    {
+        if (rigidbody2D == null)
             rigidbody2D = GetComponent<Rigidbody2D>();
-        if(spriteRenderer == null)
+        if (spriteRenderer == null)
             spriteRenderer = GetComponent<SpriteRenderer>();
 
         transform.localScale = new Vector3(0.5f, 0.5f, 1);
@@ -76,12 +82,14 @@ public class Throwable : MonoBehaviour {
         rigidbody2D.angularDrag = 0.5f;
     }
 
-    void Start() {
+    void Start()
+    {
         spriteRenderer = GetComponent<SpriteRenderer>();
         rigidbody2D = GetComponent<Rigidbody2D>();
     }
 
-    void OnTriggerEnter2D(Collider2D other) {
+    void OnTriggerEnter2D(Collider2D other)
+    {
         bool isNotFloor = !other.CompareTag("Floor");
         bool isNotPlayer = !other.CompareTag("Player");
         bool isNotEnemy = !other.CompareTag("Enemy");
@@ -96,7 +104,7 @@ public class Throwable : MonoBehaviour {
         else
         {
             StimResponder stimResponder = other.gameObject.GetComponent<StimResponder>();
-            if(stimResponder != null)
+            if (stimResponder != null)
                 stimResponder.ReactToStim(element, stim);
         }
 
@@ -104,11 +112,12 @@ public class Throwable : MonoBehaviour {
         // TODO(Mario):
         //   Искаме ли да добавяме вариация към звука - да му променяме тона, например?
         //   Ще е полезно ако могат да бъдат метнати няколко Throwable-и едновременно.
-        if(soundOnHit != null)
+        if (soundOnHit != null)
             AudioSource.PlayClipAtPoint(soundOnHit, transform.position);
 
         var particleSystem = GetComponent<ParticleSystem>();
-        if(particleSystem != null) {
+        if (particleSystem != null)
+        {
             rigidbody2D.simulated = false;
             GetComponent<SpriteRenderer>().enabled = false;
             particleSystem.Stop();
@@ -117,7 +126,9 @@ public class Throwable : MonoBehaviour {
             //   Ако променим particleSystem-а да не ползва константно време за частиците, а
             //   да е променливо, този код ще се наебе (надявам се да гръмне с грешка, за да ни уведоми, но нямам представа.)
             Destroy(gameObject, particleSystem.main.startLifetime.constant);
-        } else {
+        }
+        else
+        {
             Destroy(gameObject);
         }
     }
