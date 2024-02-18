@@ -82,6 +82,13 @@ public class Throwable : MonoBehaviour {
     }
 
     void OnTriggerEnter2D(Collider2D other) {
+        bool isNotFloor = !other.CompareTag("Floor");
+        bool isNotPlayer = !other.CompareTag("Player");
+        bool isNotEnemy = !other.CompareTag("Enemy");
+
+        if (isNotFloor && isNotPlayer && isNotEnemy)
+            return;
+
         if (spawnFieldOnHit && areaOfEffect != null)
         {
             Instantiate(areaOfEffect, transform.position, Quaternion.identity, null);
