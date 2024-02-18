@@ -8,6 +8,7 @@ TagManager:
   - KillZone
   - Enemy
   - Potion
+  - Interactible
   layers:
   - Default
   - TransparentFX
